@@ -5,7 +5,7 @@ local player = game.Players.LocalPlayer
 local displayName = player.DisplayName
 
 -- Gui Tasarım
-local window = library:AddWindow("SYNIOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.0 HELLO - " .. displayName, {
+local window = library:AddWindow("SYNIOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.0 || HELLO - " .. displayName, {
     main_color = Color3.fromRGB(0, 0, 0),
     min_size = Vector2.new(700, 750),
     can_resize = true,
@@ -129,20 +129,21 @@ folder1:AddSwitch("Situps", function(bool)
     end)
 end)
 
+-- JUNGLE GYM BÖLGESİ
 local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
 
--- Tıklama ve Giriş Servisleri
+-- Tıklama Servisi
 local VIM = game:GetService("VirtualInputManager")
 
 local function pressClick()
-    -- Sol Mouse Tıklaması Simüle Eder (E tuşu yerine)
-    VIM:SendMouseButtonEvent(0, 0, 0, true, game, 0) -- Sol tık basıldı
+    -- Ekranın ortasına veya mevcut konuma bir kez sol tık atar
+    VIM:SendMouseButtonEvent(0, 0, 0, true, game, 0) -- Bas
     task.wait(0.05)
-    VIM:SendMouseButtonEvent(0, 0, 0, false, game, 0) -- Sol tık bırakıldı
+    VIM:SendMouseButtonEvent(0, 0, 0, false, game, 0) -- Bırak
 end
 
 local pullupOn = false
-jungleFolder:AddSwitch("Auto Pull Up (Click)", function(bool)
+jungleFolder:AddSwitch("Auto Pull Up", function(bool)
     pullupOn = bool
     if bool then
         task.spawn(function()
@@ -150,17 +151,18 @@ jungleFolder:AddSwitch("Auto Pull Up (Click)", function(bool)
             local root = char and char:FindFirstChild("HumanoidRootPart")
             
             if root and pullupOn then
-                -- 1. Işınlan
+                -- 1. ADIM: Pull Up alanına ışınlan
                 root.CFrame = CFrame.new(-8666, 34, 2070)
                 task.wait(0.3)
                 
-                -- 2. E yerine 1 kez Sol Tık yapar
+                -- 2. ADIM: Alete binmek için 1 kere TIKLA
                 if pullupOn then 
                     pressClick() 
+                    task.wait(0.2)
                 end
             end
             
-            -- 3. Otomatik Çalışma (Rep)
+            -- 3. ADIM: Otomatik Çalışma (Rep)
             while pullupOn do
                 game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
                 task.wait(0.05)
