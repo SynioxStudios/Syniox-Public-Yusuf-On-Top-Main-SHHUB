@@ -130,6 +130,30 @@ folder1:AddSwitch("Situps", function(bool)
     end)
 end)
 
+local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
+
+local pullupOn = false
+jungleFolder:AddSwitch("Auto Pull Up", function(bool)
+    pullupOn = bool
+    if bool then
+        task.spawn(function()
+            while pullupOn do
+                local char = game.Players.LocalPlayer.Character
+                local root = char and char:FindFirstChild("HumanoidRootPart")
+                
+                if root then
+                    -- Pull Up bölgesine ışınlanma (Jungle Gym koordinatı)
+                    root.CFrame = CFrame.new(-10, 15, 410) 
+                end
+                
+                -- Kas geliştirme eventi
+                game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
+                task.wait(0.05) -- Hız ayarı
+            end
+        end)
+    end
+end)
+
 local function equipTool(toolName, character, backpack)
     local existingTool = character:FindFirstChildOfClass("Tool")
     if existingTool then
