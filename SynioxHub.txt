@@ -136,29 +136,38 @@ local VIM = game:GetService("VirtualInputManager")
 
 local function pressEKey()
     VIM:SendKeyEvent(true, "E", false, game)
-    task.wait(0.1)
+    task.wait(0.05)
     VIM:SendKeyEvent(false, "E", false, game)
 end
 
+-- Jungle Gym Bölmesi
+local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
 local pullupOn = false
+
 jungleFolder:AddSwitch("Auto Pull Up", function(bool)
     pullupOn = bool
+    
     if bool then
         task.spawn(function()
+            local char = game.Players.LocalPlayer.Character
+            local root = char and char:FindFirstChild("HumanoidRootPart")
+            
+            -- 1. ADIM: Işınlan ve E'ye bas (Sadece 1 kere)
+            if root and pullupOn then
+                root.CFrame = CFrame.new(-8666, 34, 2070)
+                task.wait(0.3)
+                if pullupOn then pressEKey() end
+            end
+            
+            -- 2. ADIM: Sürekli çalışma (Kapatıldığı an durur)
             while pullupOn do
-                local char = game.Players.LocalPlayer.Character
-                local root = char and char:FindFirstChild("HumanoidRootPart")
-                
-                if root then
-                    -- Karakteri Pull Up demirinde sabit tutar
-                    root.CFrame = CFrame.new(-8666, 34, 2070) 
-                end
-                
-                -- Hem Remote Event gönderir hem de E tuşuna basar (Garanti yöntem)
                 game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                pressEKey() 
-                
-                task.wait(0.1) -- Çok hızlı olup oyundan atmaması için 0.1 idealdir
+                task.wait(0.05) 
+            end
+            
+            -- Kapatıldığında karakteri aletten bırakması için opsiyonel:
+            if not pullupOn then
+                -- Buraya istersen aletten inme animasyonu için tekrar pressEKey() ekleyebiliriz
             end
         end)
     end
