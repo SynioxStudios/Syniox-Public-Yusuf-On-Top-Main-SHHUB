@@ -5,7 +5,7 @@ local player = game.Players.LocalPlayer
 local displayName = player.DisplayName
 
 -- Gui Tasarım
-local window = library:AddWindow("SYNİOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.0 HELLO - " .. displayName, {
+local window = library:AddWindow("SYNIOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.0 HELLO - " .. displayName, {
     main_color = Color3.fromRGB(0, 0, 0),
     min_size = Vector2.new(700, 750),
     can_resize = true,
