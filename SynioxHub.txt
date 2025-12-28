@@ -7,7 +7,7 @@ local displayName = player.DisplayName
 -- Gui Tasarım
 local window = library:AddWindow("SYNIOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.0 || HELLO - " .. displayName, {
     main_color = Color3.fromRGB(0, 0, 0),
-    min_size = Vector2.new(700, 750),
+    min_size = Vector2.new(700, 730),
     can_resize = true,
 })
 
@@ -129,17 +129,15 @@ folder1:AddSwitch("Situps", function(bool)
     end)
 end)
 
--- JUNGLE GYM BÖLGESİ
+-- JUNGLE GYM BÖLMESİ
 local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
 
--- Tıklama Servisi
+-- E Tuşu Fonksiyonu
 local VIM = game:GetService("VirtualInputManager")
-
-local function pressClick()
-    -- Ekranın ortasına veya mevcut konuma bir kez sol tık atar
-    VIM:SendMouseButtonEvent(0, 0, 0, true, game, 0) -- Bas
+local function pressEKey()
+    VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
     task.wait(0.05)
-    VIM:SendMouseButtonEvent(0, 0, 0, false, game, 0) -- Bırak
+    VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
 end
 
 local pullupOn = false
@@ -151,19 +149,22 @@ jungleFolder:AddSwitch("Auto Pull Up", function(bool)
             local root = char and char:FindFirstChild("HumanoidRootPart")
             
             if root and pullupOn then
-                -- 1. ADIM: Pull Up alanına ışınlan
+                -- 1. Işınlanma
                 root.CFrame = CFrame.new(-8666, 34, 2070)
                 task.wait(0.3)
                 
-                -- 2. ADIM: Alete binmek için 1 kere TIKLA
-                if pullupOn then 
-                    pressClick() 
-                    task.wait(0.2)
-                end
+                -- 2. Bir kez E'ye bas (Bin)
+                if pullupOn then pressEKey() end
+                task.wait(0.3)
             end
             
-            -- 3. ADIM: Otomatik Çalışma (Rep)
+            -- 3. Sürekli Çalışma ve Kilitleme Döngüsü
             while pullupOn do
+                -- Karakteri sürekli koordinatta tutarak inmesini engeller (Kilit)
+                if root and (root.Position - Vector3.new(-8666, 34, 2070)).Magnitude > 5 then
+                    root.CFrame = CFrame.new(-8666, 34, 2070)
+                end
+                
                 game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
                 task.wait(0.05)
             end
@@ -2545,9 +2546,9 @@ end)
 
 local credits = window:AddTab("Credits")
 
-credits:AddLabel("Script Made ByYusuf")
-credits:AddLabel("Syniox V2")
-credits:AddLabel("Those Who Helped Yusuf // HALIS")
-credits:AddLabel("Script ByYusuf")
-credits:AddLabel("TY For Helping To Halıs ❤️")
-credits:AddLabel("Thank For Using This Script")
+credits:AddLabel("👑 Script Made By Yusuf")
+credits:AddLabel("🚀 Syniox V2")
+credits:AddLabel("🤝 Special Thanks // HALIS")
+credits:AddLabel("📜 Developed By Yusuf")
+credits:AddLabel("❤️ TY For Helping To Halis")
+credits:AddLabel("✨ Thank For Using This Script")
