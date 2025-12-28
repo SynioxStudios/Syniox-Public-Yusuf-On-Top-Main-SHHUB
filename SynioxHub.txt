@@ -132,6 +132,12 @@ end)
 
 local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
 
+local function pressEKey()
+    VIM:SendKeyEvent(true, "E", false, game)
+    task.wait(0.1)
+    VIM:SendKeyEvent(false, "E", false, game)
+end
+
 local pullupOn = false
 jungleFolder:AddSwitch("Auto Pull Up", function(bool)
     pullupOn = bool
