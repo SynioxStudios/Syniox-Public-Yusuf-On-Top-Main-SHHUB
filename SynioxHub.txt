@@ -196,8 +196,6 @@ local function autoRockFarm(rockName, toggleVar)
     end
 end
 
-local folder2 = AutoFarm:AddFolder("Jungle Gym")
-
 local Rock = window:AddTab("Rock")
 
 function gettool()
