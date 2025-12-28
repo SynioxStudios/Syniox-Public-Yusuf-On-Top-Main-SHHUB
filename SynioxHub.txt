@@ -104,8 +104,7 @@ end)
 
 local handstandOn = false
 folder1:AddSwitch("Handstand", function(bool)
-    handstandOn = bool
-    task.spawn(function()
+    handstandOn = booltask.spawn(function()
         while handstandOn do
             local tool = game.Players.LocalPlayer.Backpack:FindFirstChild("Handstand")
             if tool then
@@ -131,14 +130,16 @@ folder1:AddSwitch("Situps", function(bool)
 end)
 
 local VIM = game:GetService("VirtualInputManager")
-local CAS = game:GetService("ContextActionService")
+local UIS = game:GetService("UserInputService")
 
 local function pressEKey()
-    VIM:SendKeyEvent(true, "E", false, game)
-    task.wait(0.01) 
-    VIM:SendKeyEvent(false, "E", false, game)
+    -- Tuşa basma işlemini oyun odağını bozmadan yapar
+    VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+    task.wait(0.05)
+    VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
 end
 
+-- Jungle Gym Bölmesi
 local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
 local pullupOn = false
 
@@ -149,40 +150,28 @@ jungleFolder:AddSwitch("Auto Pull Up", function(bool)
         task.spawn(function()
             local char = game.Players.LocalPlayer.Character
             local root = char and char:FindFirstChild("HumanoidRootPart")
-            local hum = char and char:FindFirstChild("Humanoid")
             
             if root and pullupOn then
-                -- 1. ADIM: Işınlanma
+                -- Sadece koordinata git (Alete odaklanma/yönelme yapmaz)
                 root.CFrame = CFrame.new(-8666, 34, 2070)
-                task.wait(0.2)
+                task.wait(0.3)
                 
-                -- 2. ADIM: Alete bin
+                -- Sadece bir kere E tuşuna basıp aleti kullanmaya başlar
                 if pullupOn then 
                     pressEKey() 
-                    task.wait(0.3)
+                    task.wait(0.2)
                 end
             end
             
-            -- 3. ADIM: Çalışma Döngüsü
+            -- Çalışma Döngüsü (Sadece rep gönderir)
             while pullupOn do
                 game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
                 task.wait(0.05) 
             end
-            
-            -- 4. ADIM: KAPATILDIĞINDA KONTROLLERİ ZORLA AÇ
-            if not pullupOn then
-                task.wait(0.1)
-                if hum then
-                    hum.PlatformStand = false -- Fiziksel kilidi kaldır
-                    hum.JumpPower = 50 -- Zıplama gücünü geri yükle
-                    hum.WalkSpeed = 16 -- Yürüme hızını geri yükle
-                    hum:SetStateEnabled(Enum.HumanoidStateType.Jumping, true) -- Zıplamayı aktif et
-                    hum:ChangeState(Enum.HumanoidStateType.GettingUp) -- Karakteri ayağa kaldır
-                end
-                -- Oyunun girişleri (Input) engellemesini kaldır
-                CAS:UnbindAction("FreezeAction") 
-            end
         end)
+    else
+        -- Kapatıldığında kontrolleri serbest bırak
+        UIS.ModalEnabled = false -- UI yüzünden kontrollerin kilitlenmesini engeller
     end
 end)
 
