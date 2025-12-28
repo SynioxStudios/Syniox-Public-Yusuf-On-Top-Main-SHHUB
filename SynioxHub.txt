@@ -132,6 +132,8 @@ end)
 
 local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
 
+local VIM = game:GetService("VirtualInputManager")
+
 local function pressEKey()
     VIM:SendKeyEvent(true, "E", false, game)
     task.wait(0.1)
@@ -148,13 +150,15 @@ jungleFolder:AddSwitch("Auto Pull Up", function(bool)
                 local root = char and char:FindFirstChild("HumanoidRootPart")
                 
                 if root then
-                    -- Pull Up bölgesine ışınlanma (Jungle Gym koordinatı)
+                    -- Karakteri Pull Up demirinde sabit tutar
                     root.CFrame = CFrame.new(-8666, 34, 2070) 
                 end
                 
-                -- Kas geliştirme eventi
+                -- Hem Remote Event gönderir hem de E tuşuna basar (Garanti yöntem)
                 game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                task.wait(0.05) -- Hız ayarı
+                pressEKey() 
+                
+                task.wait(0.1) -- Çok hızlı olup oyundan atmaması için 0.1 idealdir
             end
         end)
     end
