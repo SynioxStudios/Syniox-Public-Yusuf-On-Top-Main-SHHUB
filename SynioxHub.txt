@@ -198,17 +198,6 @@ end
 
 local folder2 = AutoFarm:AddFolder("Jungle Gym")
 
-folder2Folder:AddSwitch("Jungle Lift", function(bool)
-    if getgenv().working and not bool then
-        getgenv().working = false
-        return
-    end
-    getgenv().working = bool
-    if bool then
-        teleportAndStart("Pull Up", CFrame.new(-8666, 34, 2070))
-    end
-end)
-
 local Rock = window:AddTab("Rock")
 
 function gettool()
