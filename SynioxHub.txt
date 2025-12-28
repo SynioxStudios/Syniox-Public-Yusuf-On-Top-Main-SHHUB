@@ -143,7 +143,7 @@ jungleFolder:AddSwitch("Auto Pull Up", function(bool)
                 
                 if root then
                     -- Pull Up bölgesine ışınlanma (Jungle Gym koordinatı)
-                    root.CFrame = CFrame.new(-10, 15, 410) 
+                    root.CFrame = CFrame.new(-8666, 34, 2070) 
                 end
                 
                 -- Kas geliştirme eventi
