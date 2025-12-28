@@ -1,10 +1,17 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/EpicDeevv/Private-Scripts/refs/heads/main/th5j6j5j5j", true))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Byhalis/Gui-v8/main/v2"))()
 
-local window = library:AddWindow("Project V1 | Booster Version Deobfuscated By 228", {
-    main_color = Color3.fromRGB(193, 0, 230),
+-- Oyuncu bilgilerini alıyoruz
+local player = game.Players.LocalPlayer
+local displayName = player.DisplayName
+
+-- Gui Tasarım
+local window = library:AddWindow("SYNİOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.0 HELLO - " .. displayName, {
+    main_color = Color3.fromRGB(0, 0, 0),
     min_size = Vector2.new(700, 750),
     can_resize = true,
 })
+
+
 
 local AutoFarm = window:AddTab("Farm")
 
@@ -37,7 +44,22 @@ task.spawn(function()
     end
 end)
 
-AutoFarm:AddSwitch("Auto Eat Egg", function(state)
+AutoFarm:AddSwitch("🥚 Auto Eat Egg 30 Min", function(state)
+    autoEatEnabled = state
+end)
+
+task.spawn(function()
+    while true do
+        if autoEatEnabled then
+            eatProteinEgg()
+            task.wait(3600)
+        else
+            task.wait(1)
+        end
+    end
+end)
+
+AutoFarm:AddSwitch("🥚 Auto Eat Egg 60 Min", function(state)
     autoEatEnabled = state
 end)
 
@@ -1326,7 +1348,7 @@ local showKillsButton = Killer:AddButton("Kill Counter UI", function()
 			titleLabel.Size = UDim2.new(1, 0, 0, 20)
 			titleLabel.Position = UDim2.new(0, 0, 0, 0)
 			titleLabel.BackgroundTransparency = 1
-			titleLabel.Text = "Project V1"
+			titleLabel.Text = "Syniox Kill"
 			titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 			titleLabel.Font = Enum.Font.SourceSansBold
 			titleLabel.TextScaled = true
@@ -1989,11 +2011,7 @@ Misc:AddSwitch("Auto Clear Inventory", function(state)
     autoEatBoostsEnabled = state
 end)
 
-local credits = window:AddTab("Credits")
-
-credits:AddLabel("Deobfuscated By 228")
-
-local tabFarming = window:AddTab("Booster Tab")
+local tabFarming = window:AddTab("Fast Farm")
 
 tabFarming:AddLabel("Fast Farming").TextSize = 23
 
@@ -2390,3 +2408,12 @@ fastStrengthFolder:AddSwitch("Hide All Frames", function(bool)
         end
     end
 end)
+
+local credits = window:AddTab("Credits")
+
+credits:AddLabel("Script Made ByYusuf")
+credits:AddLabel("Syniox V2")
+credits:AddLabel("Those Who Helped Yusuf // HALIS")
+credits:AddLabel("Script ByYusuf")
+credits:AddLabel("TY For Helping To Halıs ❤️")
+credits:AddLabel("Thank For Using This Script")
