@@ -11,8 +11,6 @@ local window = library:AddWindow("SYNIOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.
     can_resize = true,
 })
 
-
-
 local AutoFarm = window:AddTab("Farm")
 
 AutoFarm:AddLabel("Complements to Farm")
