@@ -129,6 +129,8 @@ folder1:AddSwitch("Situps", function(bool)
     end)
 end)
 
+local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
+
 -- Tıklama ve Giriş Servisleri
 local VIM = game:GetService("VirtualInputManager")
 
