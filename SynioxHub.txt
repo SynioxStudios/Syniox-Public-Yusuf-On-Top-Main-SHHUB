@@ -2544,11 +2544,17 @@ fastStrengthFolder:AddSwitch("Hide All Frames", function(bool)
     end
 end)
 
+-- Credits Tab Oluşturma
 local credits = window:AddTab("Credits")
 
+-- İçerik Etiketleri
 credits:AddLabel("👑 Script Made By Yusuf")
 credits:AddLabel("🚀 Syniox V2")
 credits:AddLabel("🤝 Special Thanks // HALIS")
 credits:AddLabel("📜 Developed By Yusuf")
 credits:AddLabel("❤️ TY For Helping To Halis")
 credits:AddLabel("✨ Thank For Using This Script")
+
+-- EĞER HALA GELMİYORSA:
+-- Kullandığın kütüphaneye göre scriptin en sonuna şunlardan biri gerekebilir:
+-- window:Show() -- Bazı kütüphanelerde menüyü göstermek için gerekir.
