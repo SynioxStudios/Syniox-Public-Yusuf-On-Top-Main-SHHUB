@@ -1491,7 +1491,7 @@ pets:AddSwitch("Auto Open Aura", function(bool)
     end
 end)
 
-local LookDura = window:AddTab("LookDura")
+local LookDura = window:AddTab("Stats")
 
 local SelectPlayerName = ""
 
@@ -1550,7 +1550,7 @@ task.spawn(function()
         if SelectPlayerName ~= "" then
             local player = game.Players:FindFirstChild(SelectPlayerName)
             if player then
-                if player:FindFirstChild("Gems") then
+                if player:FindFirstChild("💎 Gems") then
                     Update1.Text = "Gems: " .. FormatDisplay(player.Gems.Value)
                 end
                 if player:FindFirstChild("Agility") then
@@ -1559,7 +1559,7 @@ task.spawn(function()
                 if player:FindFirstChild("Durability") then
                     Update4.Text = "Durability: " .. FormatDisplay(player.Durability.Value)
                 end
-                if player:FindFirstChild("muscleKingTime") then
+                if player:FindFirstChild("🕑 muscleKingTime") then
                     Update6.Text = "Muscle King Time: " .. FormatDisplay(player.muscleKingTime.Value)
                 end
                 if player:FindFirstChild("customSize") then
@@ -1577,13 +1577,13 @@ task.spawn(function()
 
                 local leaderstats = player:FindFirstChild("leaderstats")
                 if leaderstats then
-                    if leaderstats:FindFirstChild("Strength") then
+                    if leaderstats:FindFirstChild("💪 Strength") then
                         Update.Text = "Strength: " .. FormatDisplay(leaderstats.Strength.Value)
                     end
                     if leaderstats:FindFirstChild("Rebirths") then
                         Update2.Text = "Rebirth: " .. FormatDisplay(leaderstats.Rebirths.Value)
                     end
-                    if leaderstats:FindFirstChild("Kills") then
+                    if leaderstats:FindFirstChild("💀 Kills") then
                         Update5.Text = "Kills: " .. FormatDisplay(leaderstats.Kills.Value)
                     end
                 end
@@ -1758,20 +1758,93 @@ end)
 
 local Misc = window:AddTab("Misc")
 
-local antiAFKEnabled = true
-Misc:AddButton("Anti Afk", function(bool)
-    antiAFKEnabled = bool
+Misc:AddButton("Anti Afk", function()
+    -- Arka Plan Anti-AFK (VirtualUser)
+    local vu = game:GetService("VirtualUser")
+    game:GetService("Players").LocalPlayer.Idled:Connect(function()
+        vu:CaptureController()
+        vu:ClickButton2(Vector2.new())
+    end)
+
+    -- GUI Oluşturma
+    local ScreenGui = Instance.new("ScreenGui")
+    local MainFrame = Instance.new("Frame")
+    local UICorner = Instance.new("UICorner")
+    local Title = Instance.new("TextLabel")
+    local Separator = Instance.new("Frame")
+    local TimerLabel = Instance.new("TextLabel")
+    local FPSLabel = Instance.new("TextLabel")
+    local UIStroke = Instance.new("UIStroke")
+
+    ScreenGui.Parent = game:GetService("CoreGui")
     
-    if bool then
-        setupAntiAFK()
-    else
-        if antiAFKConnection then
-            antiAFKConnection:Disconnect()
-            antiAFKConnection = nil
-            print("Anti-AFK system disabled")
+    -- Ana Panel (130x135 - Koyu & Yuvarlak)
+    MainFrame.Name = "Syniox_AntiAFK"
+    MainFrame.Parent = ScreenGui
+    MainFrame.BackgroundColor3 = Color3.fromRGB(8, 8, 8) 
+    MainFrame.Position = UDim2.new(0.05, 0, 0.4, 0)
+    MainFrame.Size = UDim2.new(0, 130, 0, 135)
+    MainFrame.Active = true
+    MainFrame.Draggable = true 
+
+    -- Köşe Yuvarlatma
+    UICorner.CornerRadius = UDim.new(0, 10)
+    UICorner.Parent = MainFrame
+
+    -- Koyu Kırmızı Kenarlık
+    UIStroke.Parent = MainFrame
+    UIStroke.Color = Color3.fromRGB(130, 0, 0) 
+    UIStroke.Thickness = 1.8
+
+    -- BAŞLIK: Syniox Public (Normal Harfler)
+    Title.Parent = MainFrame
+    Title.Size = UDim2.new(1, 0, 0, 35)
+    Title.Text = "Syniox Public" 
+    Title.TextColor3 = Color3.fromRGB(180, 0, 0)
+    Title.BackgroundTransparency = 1
+    Title.TextSize = 14
+    Title.Font = Enum.Font.SourceSansBold
+
+    -- İnce Çizgi
+    Separator.Parent = MainFrame
+    Separator.BackgroundColor3 = Color3.fromRGB(130, 0, 0)
+    Separator.BorderSizePixel = 0
+    Separator.Position = UDim2.new(0.15, 0, 0, 35)
+    Separator.Size = UDim2.new(0.7, 0, 0, 1)
+
+    -- Bilgiler (Normal Font + Emojiler)
+    TimerLabel.Parent = MainFrame
+    TimerLabel.Position = UDim2.new(0, 0, 0, 45)
+    TimerLabel.Size = UDim2.new(1, 0, 0, 40)
+    TimerLabel.Text = "⏳ Sure: 00:00:00"
+    TimerLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    TimerLabel.BackgroundTransparency = 1
+    TimerLabel.TextSize = 14
+    TimerLabel.Font = Enum.Font.SourceSans 
+
+    FPSLabel.Parent = MainFrame
+    FPSLabel.Position = UDim2.new(0, 0, 0, 85)
+    FPSLabel.Size = UDim2.new(1, 0, 0, 40)
+    FPSLabel.Text = "🚀 FPS: 0"
+    FPSLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    FPSLabel.BackgroundTransparency = 1
+    FPSLabel.TextSize = 14
+    FPSLabel.Font = Enum.Font.SourceSans 
+
+    -- Stabil Güncelleme
+    local startTime = os.time()
+    local lastUpdate = 0
+    game:GetService("RunService").RenderStepped:Connect(function(dt)
+        local diff = os.time() - startTime
+        TimerLabel.Text = string.format("⏳ Sure: %02d:%02d:%02d", math.floor(diff/3600), math.floor((diff%3600)/60), diff%60)
+        
+        lastUpdate = lastUpdate + dt
+        if lastUpdate >= 0.5 then
+            FPSLabel.Text = "🚀 FPS: " .. math.floor(1/dt)
+            lastUpdate = 0
         end
-    end
-end, true)
+    end)
+end)
 
 local switch = Misc:AddSwitch("Lock Position", function(Value)
     if Value then
@@ -2396,7 +2469,7 @@ task.spawn(function()
     end
 end)
 
-fastStrenghtFolder:AddSwitch("Auto Eat Egg", function(state)
+fastStrenghtFolder:AddSwitch("🥚Auto Eat Egg 30 Min", function(state)
     autoEatEnabled = state
 end)
 
