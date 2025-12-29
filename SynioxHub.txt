@@ -1805,7 +1805,7 @@ local antiAfkConnection = nil
 
 Misc:AddSwitch("Anti Afk", function(Value)
     if Value then
-        -- --- AÇILDIĞINDA (Value == true) ---
+        -- --- AÇILDIĞINDA ---
         _G.AntiAfkActive = true
         
         -- Anti-AFK Mekanizması
@@ -1831,53 +1831,53 @@ Misc:AddSwitch("Anti Afk", function(Value)
         ScreenGui.Name = "Syniox_AntiAFK"
         ScreenGui.Parent = game:GetService("CoreGui")
         
-        -- Panel: Hafif Şeffaf Siyah (0.3)
+        -- Panel: 120x125 Boyutunda ve Koyu Siyah
         MainFrame.Parent = ScreenGui
         MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) 
-        MainFrame.BackgroundTransparency = 0.3 
+        MainFrame.BackgroundTransparency = 0.1 -- Kapalı siyah
         MainFrame.Position = UDim2.new(0.05, 0, 0.4, 0)
-        MainFrame.Size = UDim2.new(0, 150, 0, 165)
+        MainFrame.Size = UDim2.new(0, 120, 0, 125) -- İstediğin boyut
         MainFrame.Active = true
         MainFrame.Draggable = true 
 
-        UICorner.CornerRadius = UDim.new(0, 10)
+        UICorner.CornerRadius = UDim.new(0, 8)
         UICorner.Parent = MainFrame
 
         UIStroke.Parent = MainFrame
         UIStroke.Color = Color3.fromRGB(150, 0, 0) 
-        UIStroke.Thickness = 2
+        UIStroke.Thickness = 1.5
 
-        -- Başlık ve Çizgi
+        -- Başlık
         Title.Parent = MainFrame
-        Title.Size = UDim2.new(1, 0, 0, 35)
+        Title.Size = UDim2.new(1, 0, 0, 28)
         Title.Text = "Syniox Public" 
         Title.TextColor3 = Color3.fromRGB(200, 0, 0)
         Title.BackgroundTransparency = 1
-        Title.TextSize = 18
+        Title.TextSize = 15
         Title.Font = Enum.Font.SourceSansBold
 
         Separator.Parent = MainFrame
         Separator.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
         Separator.BorderSizePixel = 0
-        Separator.Position = UDim2.new(0.1, 0, 0, 35)
+        Separator.Position = UDim2.new(0.1, 0, 0, 28)
         Separator.Size = UDim2.new(0.8, 0, 0, 1)
 
-        -- Yazı Hizalama Fonksiyonu
+        -- Bilgi Etiketleri (Yazılar Korunarak Sığdırıldı)
         local function SetupLabel(lbl, text, pos)
             lbl.Parent = MainFrame
             lbl.Position = pos
-            lbl.Size = UDim2.new(1, 0, 0, 35)
+            lbl.Size = UDim2.new(1, 0, 0, 25)
             lbl.Text = text
             lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
             lbl.BackgroundTransparency = 1
-            lbl.TextSize = 20
+            lbl.TextSize = 16
             lbl.Font = Enum.Font.SourceSansBold
             lbl.TextXAlignment = Enum.TextXAlignment.Center
         end
 
-        SetupLabel(TimerLabel, "⏳ Sure: 00:00:00", UDim2.new(0, 0, 0, 45))
-        SetupLabel(FPSLabel, "🚀 FPS: 0", UDim2.new(0, 0, 0, 80))
-        SetupLabel(MSLabel, "📡 MS: 0", UDim2.new(0, 0, 0, 115))
+        SetupLabel(TimerLabel, "⏳ Sure: 00:00:00", UDim2.new(0, 0, 0, 35))
+        SetupLabel(FPSLabel, "🚀 FPS: 0", UDim2.new(0, 0, 0, 62))
+        SetupLabel(MSLabel, "📡 MS: 0", UDim2.new(0, 0, 0, 89))
 
         -- Güncelleme Döngüsü
         local startTime = os.time()
@@ -1900,7 +1900,7 @@ Misc:AddSwitch("Anti Afk", function(Value)
         end)
 
     else
-        -- --- KAPATILDIĞINDA (Value == false) ---
+        -- --- KAPATILDIĞINDA ---
         _G.AntiAfkActive = false
         if antiAfkConnection then antiAfkConnection:Disconnect() end
         local oldGui = game:GetService("CoreGui"):FindFirstChild("Syniox_AntiAFK")
