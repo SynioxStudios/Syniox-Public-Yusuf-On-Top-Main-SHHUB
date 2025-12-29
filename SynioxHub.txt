@@ -1802,126 +1802,115 @@ end)
 local Misc = window:AddTab("Misc")
 
 local antiAfkConnection = nil 
+local afkEnabled = false -- Durumu takip etmek için
 
-Misc:AddButton("Anti Afk (Aç/Kapat)", function()
-    -- Kapatma Mantığı
-    if _G.AntiAfkActive then
-        _G.AntiAfkActive = false
+-- Menüdeki Buton (Toggle Mantığı)
+Misc:AddToggle("Anti Afk", false, function(state)
+    afkEnabled = state -- Butonun açık/kapalı durumunu al
+
+    if afkEnabled then
+        -- --- AÇILDIĞINDA ÇALIŞACAK KISIM ---
+        
+        -- Anti-AFK Servisi
+        local vu = game:GetService("VirtualUser")
+        antiAfkConnection = game:GetService("Players").LocalPlayer.Idled:Connect(function()
+            if afkEnabled then
+                vu:CaptureController()
+                vu:ClickButton2(Vector2.new())
+            end
+        end)
+
+        -- GUI Oluşturma (1172.jpg görselindeki orijinal düzen)
+        local ScreenGui = Instance.new("ScreenGui")
+        local MainFrame = Instance.new("Frame")
+        local UICorner = Instance.new("UICorner")
+        local Title = Instance.new("TextLabel")
+        local Separator = Instance.new("Frame")
+        local TimerLabel = Instance.new("TextLabel")
+        local FPSLabel = Instance.new("TextLabel")
+        local MSLabel = Instance.new("TextLabel")
+        local UIStroke = Instance.new("UIStroke")
+
+        ScreenGui.Name = "Syniox_AntiAFK"
+        ScreenGui.Parent = game:GetService("CoreGui")
+        
+        -- Ana Panel: Hafif Şeffaf Siyah (0.3)
+        MainFrame.Parent = ScreenGui
+        MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) 
+        MainFrame.BackgroundTransparency = 0.3 -- Arkayı hafif gösteren siyah
+        MainFrame.Position = UDim2.new(0.05, 0, 0.4, 0)
+        MainFrame.Size = UDim2.new(0, 150, 0, 165)
+        MainFrame.Active = true
+        MainFrame.Draggable = true 
+
+        UICorner.CornerRadius = UDim.new(0, 10)
+        UICorner.Parent = MainFrame
+
+        UIStroke.Parent = MainFrame
+        UIStroke.Color = Color3.fromRGB(150, 0, 0) 
+        UIStroke.Thickness = 2
+
+        -- Başlık
+        Title.Parent = MainFrame
+        Title.Size = UDim2.new(1, 0, 0, 35)
+        Title.Text = "Syniox Public" 
+        Title.TextColor3 = Color3.fromRGB(200, 0, 0)
+        Title.BackgroundTransparency = 1
+        Title.TextSize = 18
+        Title.Font = Enum.Font.SourceSansBold
+
+        -- Çizgi
+        Separator.Parent = MainFrame
+        Separator.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+        Separator.BorderSizePixel = 0
+        Separator.Position = UDim2.new(0.1, 0, 0, 35)
+        Separator.Size = UDim2.new(0.8, 0, 0, 1)
+
+        -- Bilgi Etiketleri (Görseldeki gibi hizalı ve büyük)
+        local function CreateLabel(text, pos)
+            local lbl = Instance.new("TextLabel")
+            lbl.Parent = MainFrame
+            lbl.Position = pos
+            lbl.Size = UDim2.new(1, 0, 0, 35)
+            lbl.Text = text
+            lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+            lbl.BackgroundTransparency = 1
+            lbl.TextSize = 20
+            lbl.Font = Enum.Font.SourceSansBold
+            lbl.TextXAlignment = Enum.TextXAlignment.Center
+            return lbl
+        end
+
+        TimerLabel = CreateLabel("⏳ Sure: 00:00:00", UDim2.new(0, 0, 0, 45))
+        FPSLabel = CreateLabel("🚀 FPS: 0", UDim2.new(0, 0, 0, 80))
+        MSLabel = CreateLabel("📡 MS: 0", UDim2.new(0, 0, 0, 115))
+
+        -- Canlı Güncelleme
+        local startTime = os.time()
+        local lastUpdate = 0
+        
+        task.spawn(function()
+            while afkEnabled do
+                local dt = task.wait(0.1)
+                local diff = os.time() - startTime
+                TimerLabel.Text = string.format("⏳ Sure: %02d:%02d:%02d", math.floor(diff/3600), math.floor((diff%3600)/60), diff%60)
+                
+                lastUpdate = lastUpdate + dt
+                if lastUpdate >= 0.5 then
+                    FPSLabel.Text = "🚀 FPS: " .. math.floor(1/dt)
+                    local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
+                    MSLabel.Text = "📡 MS: " .. ping
+                    lastUpdate = 0
+                end
+            end
+        end)
+
+    else
+        -- --- KAPATILDIĞINDA TEMİZLE ---
         if antiAfkConnection then antiAfkConnection:Disconnect() end
         local oldGui = game:GetService("CoreGui"):FindFirstChild("Syniox_AntiAFK")
         if oldGui then oldGui:Destroy() end
-        return
     end
-
-    -- Açma Mantığı
-    _G.AntiAfkActive = true
-
-    -- Anti-AFK Servisi
-    local vu = game:GetService("VirtualUser")
-    antiAfkConnection = game:GetService("Players").LocalPlayer.Idled:Connect(function()
-        if _G.AntiAfkActive then
-            vu:CaptureController()
-            vu:ClickButton2(Vector2.new())
-        end
-    end)
-
-    -- GUI Yapısı
-    local ScreenGui = Instance.new("ScreenGui")
-    local MainFrame = Instance.new("Frame")
-    local UICorner = Instance.new("UICorner")
-    local Title = Instance.new("TextLabel")
-    local TimerLabel = Instance.new("TextLabel")
-    local FPSLabel = Instance.new("TextLabel")
-    local MSLabel = Instance.new("TextLabel")
-    local UIStroke = Instance.new("UIStroke")
-
-    ScreenGui.Name = "Syniox_AntiAFK"
-    ScreenGui.Parent = game:GetService("CoreGui")
-    ScreenGui.ResetOnSpawn = false
-    
-    -- Ana Panel: Arkası görülebilir orta seviye şeffaflık
-    MainFrame.Parent = ScreenGui
-    MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15) 
-    MainFrame.BackgroundTransparency = 0.5 -- İdeal şeffaflık dengesi
-    MainFrame.Position = UDim2.new(0.05, 0, 0.4, 0)
-    MainFrame.Size = UDim2.new(0, 120, 0, 130) -- Daha da kompakt boyut
-    MainFrame.Active = true
-    MainFrame.Draggable = true 
-
-    UICorner.CornerRadius = UDim.new(0, 12)
-    UICorner.Parent = MainFrame
-
-    -- Kenarlık (Neon Kırmızı Efekti)
-    UIStroke.Parent = MainFrame
-    UIStroke.Color = Color3.fromRGB(255, 0, 0) 
-    UIStroke.Thickness = 1.8
-    UIStroke.Transparency = 0.2
-
-    -- Yazı Fonksiyonu (Okunabilirliği artırmak için)
-    local function StyleLabel(label)
-        label.BackgroundTransparency = 1
-        label.Font = Enum.Font.GothamBold
-        label.TextStrokeTransparency = 0.5 -- Yazıların arkası görünürken okunması için gölge
-        label.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    end
-
-    -- Başlık
-    Title.Parent = MainFrame
-    Title.Size = UDim2.new(1, 0, 0, 30)
-    Title.Text = "SYNIOX" 
-    Title.TextColor3 = Color3.fromRGB(255, 50, 50)
-    Title.TextSize = 20
-    StyleLabel(Title)
-
-    -- Süre
-    TimerLabel.Parent = MainFrame
-    TimerLabel.Position = UDim2.new(0, 0, 0, 35)
-    TimerLabel.Size = UDim2.new(1, 0, 0, 25)
-    TimerLabel.Text = "00:00:00"
-    TimerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TimerLabel.TextSize = 18 
-    StyleLabel(TimerLabel)
-
-    -- FPS
-    FPSLabel.Parent = MainFrame
-    FPSLabel.Position = UDim2.new(0, 0, 0, 65)
-    FPSLabel.Size = UDim2.new(1, 0, 0, 25)
-    FPSLabel.Text = "FPS: 0"
-    FPSLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
-    FPSLabel.TextSize = 18 
-    StyleLabel(FPSLabel)
-
-    -- MS
-    MSLabel.Parent = MainFrame
-    MSLabel.Position = UDim2.new(0, 0, 0, 95)
-    MSLabel.Size = UDim2.new(1, 0, 0, 25)
-    MSLabel.Text = "MS: 0"
-    MSLabel.TextColor3 = Color3.fromRGB(255, 180, 0)
-    MSLabel.TextSize = 18 
-    StyleLabel(MSLabel)
-
-    -- Güncelleme Döngüsü
-    local startTime = os.time()
-    local lastUpdate = 0
-    
-    local runConnection
-    runConnection = game:GetService("RunService").RenderStepped:Connect(function(dt)
-        if not _G.AntiAfkActive then 
-            runConnection:Disconnect() 
-            return 
-        end
-        
-        local diff = os.time() - startTime
-        TimerLabel.Text = string.format("%02d:%02d:%02d", math.floor(diff/3600), math.floor((diff%3600)/60), diff%60)
-        
-        lastUpdate = lastUpdate + dt
-        if lastUpdate >= 0.5 then
-            FPSLabel.Text = "FPS: " .. math.floor(1/dt)
-            local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
-            MSLabel.Text = "MS: " .. ping
-            lastUpdate = 0
-        end
-    end)
 end)
 
 local switch = Misc:AddSwitch("Lock Position", function(Value)
