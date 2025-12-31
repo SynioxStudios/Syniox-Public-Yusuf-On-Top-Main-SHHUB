@@ -140,32 +140,92 @@ local function pressEKey()
     VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
 end
 
-local pullupOn = false
-jungleFolder:AddSwitch("Auto Pull Up", function(bool)
-    pullupOn = bool
+-- 1. Auto Bench Press
+local benchOn = false
+jungleFolder:AddSwitch("Auto Bench Press", function(bool)
+    benchOn = bool
     if bool then
         task.spawn(function()
-            local char = game.Players.LocalPlayer.Character
-            local root = char and char:FindFirstChild("HumanoidRootPart")
-            
-            if root and pullupOn then
-                -- 1. Işınlanma
-                root.CFrame = CFrame.new(-8666, 34, 2070)
-                task.wait(0.3)
-                
-                -- 2. Bir kez E'ye bas (Bin)
-                if pullupOn then pressEKey() end
-                task.wait(0.3)
-            end
-            
-            -- 3. Sürekli Çalışma ve Kilitleme Döngüsü
-            while pullupOn do
-                -- Karakteri sürekli koordinatta tutarak inmesini engeller (Kilit)
-                if root and (root.Position - Vector3.new(-8666, 34, 2070)).Magnitude > 5 then
-                    root.CFrame = CFrame.new(-8666, 34, 2070)
+            local targetPos = Vector3.new(-8173, 64, 1898)
+            while benchOn do
+                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    if (root.Position - targetPos).Magnitude > 5 then
+                        root.CFrame = CFrame.new(targetPos)
+                        task.wait(0.3)
+                        pressEKey()
+                    end
+                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
                 end
-                
-                game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
+                task.wait(0.05)
+            end
+        end)
+    end
+end)
+
+-- 2. Auto Squat
+local squatOn = false
+jungleFolder:AddSwitch("Auto Squat", function(bool)
+    squatOn = bool
+    if bool then
+        task.spawn(function()
+            local targetPos = Vector3.new(-8352, 34, 2878)
+            while squatOn do
+                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    if (root.Position - targetPos).Magnitude > 5 then
+                        root.CFrame = CFrame.new(targetPos)
+                        task.wait(0.3)
+                        pressEKey()
+                    end
+                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
+                end
+                task.wait(0.05)
+            end
+        end)
+    end
+end)
+
+-- 3. Auto Boulder
+local boulderOn = false
+jungleFolder:AddSwitch("Auto Boulder", function(bool)
+    boulderOn = bool
+    if bool then
+        task.spawn(function()
+            local targetPos = Vector3.new(-8621, 34, 2684)
+            while boulderOn do
+                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    if (root.Position - targetPos).Magnitude > 5 then
+                        root.CFrame = CFrame.new(targetPos)
+                        task.wait(0.3)
+                        pressEKey()
+                    end
+                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
+                end
+                task.wait(0.05)
+            end
+        end)
+    end
+end)
+
+-- 4. Auto Jungle Lift
+local liftOn = false
+jungleFolder:AddSwitch("Auto Jungle Lift", function(bool)
+    liftOn = bool
+    if bool then
+        task.spawn(function()
+            local targetPos = Vector3.new(-8642.396, 6.798, 2086.103)
+            while liftOn do
+                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    if (root.Position - targetPos).Magnitude > 5 then
+                        root.CFrame = CFrame.new(targetPos)
+                        task.wait(0.3)
+                        pressEKey()
+                    end
+                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
+                end
                 task.wait(0.05)
             end
         end)
