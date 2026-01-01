@@ -2570,6 +2570,37 @@ fastStrengthFolder:AddSwitch("Lock Position", function(Value)
     end
 end)
 
+local autoEatEnabled = false
+
+local function eatProteinEgg()
+    local player = game.Players.LocalPlayer
+    local backpack = player:WaitForChild("Backpack")
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    local egg = backpack:FindFirstChild("Protein Egg")
+    if egg then
+        egg.Parent = character
+        pcall(function()
+            egg:Activate()
+        end)
+    end
+end
+
+task.spawn(function()
+    while true do
+        if autoEatEnabled then
+            eatProteinEgg()
+            task.wait(1800)
+        else
+            task.wait(1)
+        end
+    end
+end)
+
+fastStrenght:AddSwitch("Auto Eat Egg", function(state)
+    autoEatEnabled = state
+end)
+
 fastStrengthFolder:AddSwitch("Hide All Frames", function(bool)
     local rSto = game:GetService("ReplicatedStorage")
     for _, obj in pairs(rSto:GetChildren()) do
