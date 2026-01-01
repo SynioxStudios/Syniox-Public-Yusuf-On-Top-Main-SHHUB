@@ -1,4 +1,4 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Byhalis/Gui-v8/main/v2"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SynioxStudios/SynioxPublic-SH-MSGui-ByYusuf-Font/refs/heads/main/v2%20(1).txt"))()
 
 -- Oyuncu bilgilerini alıyoruz
 local player = game.Players.LocalPlayer
@@ -1867,9 +1867,53 @@ end)
 
 local Misc = window:AddTab("Misc")
 
+Misc:AddButton("Redeem All Muscle Codes", function()
+    local remote = game:GetService("ReplicatedStorage").rEvents.codeRemote
+    local codes = {
+        Misc:AddButton("Redeem All Muscle Codes", function()
+    local remote = game:GetService("ReplicatedStorage").rEvents.codeRemote
+    local codes = {
+        "musclestorm50", 
+        "spacegems50", 
+        "megalift50", 
+        "speedy50", 
+        "skybloom75", 
+        "galaxycrystal50", 
+        "supermuscle100", 
+        "superpunch100", 
+        "epicreward500", 
+        "launch250", 
+        "frostgems10", 
+        "millionmuscles", 
+        "heavygems10", 
+        "supergems50", 
+        "phoenix750"
+    }
+
+    -- Arka planda çalışması için task.spawn
+    task.spawn(function()
+        for _, code in pairs(codes) do
+            remote:InvokeServer(code)
+            task.wait(0.3) -- Güvenli hız
+        end
+    end)
+end)
+    }
+
+    -- Oyunu dondurmaması için arka planda (spawn) çalıştırıyoruz
+    task.spawn(function()
+        for _, code in pairs(codes) do
+            -- Muscle Legends InvokeServer kullanır
+            remote:InvokeServer(code)
+            -- 0.5 saniye bekleme: Kodların sunucu tarafından onaylanması için en güvenli süre
+            task.wait(0.3) 
+        end
+        print("Tüm kodlar denendi!")
+    end)
+end)
+
 Misc:AddSwitch("Anti Afk", function(Value)
     if Value then
-        -- --- AÇILDIĞINDA ---
         _G.AntiAfkActive = true
         
         -- Anti-AFK Mekanizması
@@ -1895,12 +1939,11 @@ Misc:AddSwitch("Anti Afk", function(Value)
         ScreenGui.Name = "Syniox_AntiAFK"
         ScreenGui.Parent = game:GetService("CoreGui")
         
-        -- Panel: 120x125 Boyutunda ve Koyu Siyah
         MainFrame.Parent = ScreenGui
         MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) 
-        MainFrame.BackgroundTransparency = 0.1 -- Kapalı siyah
+        MainFrame.BackgroundTransparency = 0.1
         MainFrame.Position = UDim2.new(0.05, 0, 0.4, 0)
-        MainFrame.Size = UDim2.new(0, 120, 0, 125) -- İstediğin boyut
+        MainFrame.Size = UDim2.new(0, 120, 0, 125)
         MainFrame.Active = true
         MainFrame.Draggable = true 
 
@@ -1911,7 +1954,6 @@ Misc:AddSwitch("Anti Afk", function(Value)
         UIStroke.Color = Color3.fromRGB(150, 0, 0) 
         UIStroke.Thickness = 1.5
 
-        -- Başlık
         Title.Parent = MainFrame
         Title.Size = UDim2.new(1, 0, 0, 28)
         Title.Text = "Syniox Public" 
@@ -1926,7 +1968,6 @@ Misc:AddSwitch("Anti Afk", function(Value)
         Separator.Position = UDim2.new(0.1, 0, 0, 28)
         Separator.Size = UDim2.new(0.8, 0, 0, 1)
 
-        -- Bilgi Etiketleri (Yazılar Korunarak Sığdırıldı)
         local function SetupLabel(lbl, text, pos)
             lbl.Parent = MainFrame
             lbl.Position = pos
@@ -1939,32 +1980,34 @@ Misc:AddSwitch("Anti Afk", function(Value)
             lbl.TextXAlignment = Enum.TextXAlignment.Center
         end
 
-        SetupLabel(TimerLabel, "⏳ Sure: 00:00:00", UDim2.new(0, 0, 0, 35))
+        SetupLabel(TimerLabel, "⏳ Time: 00:00:00", UDim2.new(0, 0, 0, 35))
         SetupLabel(FPSLabel, "🚀 FPS: 0", UDim2.new(0, 0, 0, 62))
         SetupLabel(MSLabel, "📡 MS: 0", UDim2.new(0, 0, 0, 89))
 
-        -- Güncelleme Döngüsü
+        -- Güncelleme Döngüsü (Geliştirilmiş)
         local startTime = os.time()
-        local lastUpdate = 0
+        local RunService = game:GetService("RunService")
+        local Stats = game:GetService("Stats")
         
         task.spawn(function()
             while _G.AntiAfkActive do
-                local dt = task.wait(0.1)
+                -- Zaman hesaplama
                 local diff = os.time() - startTime
-                TimerLabel.Text = string.format("⏳ Sure: %02d:%02d:%02d", math.floor(diff/3600), math.floor((diff%3600)/60), diff%60)
+                TimerLabel.Text = string.format("⏳ Time: %02d:%02d:%02d", math.floor(diff/3600), math.floor((diff%3600)/60), diff%60)
                 
-                lastUpdate = lastUpdate + dt
-                if lastUpdate >= 0.5 then
-                    FPSLabel.Text = "🚀 FPS: " .. math.floor(1/dt)
-                    local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
-                    MSLabel.Text = "📡 MS: " .. ping
-                    lastUpdate = 0
-                end
+                -- FPS Hesaplama (RenderStepped ile en doğru sonucu verir)
+                local fps = math.floor(1 / RunService.RenderStepped:Wait())
+                FPSLabel.Text = "🚀 FPS: " .. fps
+                
+                -- Ping (MS) Hesaplama
+                local ping = math.floor(Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
+                MSLabel.Text = "📡 MS: " .. ping
+                
+                task.wait(0.5) -- Her yarım saniyede bir güncelle (Performans için)
             end
         end)
 
     else
-        -- --- KAPATILDIĞINDA ---
         _G.AntiAfkActive = false
         if antiAfkConnection then antiAfkConnection:Disconnect() end
         local oldGui = game:GetService("CoreGui"):FindFirstChild("Syniox_AntiAFK")
