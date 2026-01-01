@@ -2211,9 +2211,9 @@ Misc:AddSwitch("Auto Clear Inventory", function(state)
     autoEatBoostsEnabled = state
 end)
 
-local tabFarming = window:AddTab("Fast Farm")
+local packFarming = window:AddTab("Pack Farm")
 
-tabFarming:AddLabel("Fast Farming").TextSize = 23
+packFarming:AddLabel("Fast Farming").TextSize = 23
 
 local player = game.Players.LocalPlayer
 local muscleEvent = player:WaitForChild("muscleEvent")
@@ -2242,7 +2242,7 @@ local function fastRepLoop()
     end
 end
 
-tabFarming:AddSwitch("Fast Strength", function(state)
+packFarming:AddSwitch("Fast Strength", function(state)
     runFastRep = state
     if runFastRep then
         task.spawn(fastRepLoop)
@@ -2251,7 +2251,7 @@ tabFarming:AddSwitch("Fast Strength", function(state)
     end
 end)
 
-tabFarming:AddLabel("Useful").TextSize = 23
+packFarming:AddLabel("Useful").TextSize = 23
 
 local autoEatEnabled = false
 local lastEggTime = 0
@@ -2303,11 +2303,11 @@ task.spawn(function()
     end
 end)
 
-tabFarming:AddSwitch("Auto Eat Eggs", function(state)
+packFarming:AddSwitch("Auto Eat Eggs", function(state)
     autoEatEnabled = state
 end)
 
-tabFarming:AddSwitch("Hide All Frames", function(bool)
+packFarming:AddSwitch("Hide All Frames", function(bool)
     local rSto = game:GetService("ReplicatedStorage")
     for _, obj in pairs(rSto:GetChildren()) do
         if obj.Name:match("Frame$") then
@@ -2316,7 +2316,7 @@ tabFarming:AddSwitch("Hide All Frames", function(bool)
     end
 end)
 
-tabFarming:AddButton("Full Optimization", function()
+packFarming:AddButton("Full Optimization", function()
     local player = game.Players.LocalPlayer
     local playerGui = player:WaitForChild("PlayerGui")
     local lighting = game:GetService("Lighting")
@@ -2389,7 +2389,7 @@ tabFarming:AddButton("Full Optimization", function()
     darkenSky()
 end)
 
-tabFarming:AddLabel("Fast Rebirths").TextSize = 23
+packFarming:AddLabel("Fast Rebirths").TextSize = 23
 
 local fastStrengthFolder = tabFarming:AddFolder("Fast Rebirths Functions")
 
@@ -2610,12 +2610,11 @@ fastStrengthFolder:AddSwitch("Hide All Frames", function(bool)
 end)
 
 -- Credits Tab Oluşturma
-local credits = window:AddTab("Credits")
-
+local credıts = window:AddTab("Credıts")
 -- İçerik Etiketleri
-credits:AddLabel("👑 Script Made By Yusuf")
-credits:AddLabel("🚀 Syniox V2")
-credits:AddLabel("🤝 Special Thanks // HALIS")
-credits:AddLabel("📜 Developed By Yusuf")
-credits:AddLabel("❤️ TY For Helping To Halis")
-credits:AddLabel("✨ Thank For Using This Script")
+credıts:AddLabel("👑 Script Made By Yusuf")
+credıts:AddLabel("🚀 Syniox V2")
+credıts:AddLabel("🤝 Special Thanks // HALIS")
+credıts:AddLabel("📜 Developed By Yusuf")
+credıts:AddLabel("❤️ TY For Helping To Halis")
+credıts:AddLabel("✨ Thank For Using This Script")
