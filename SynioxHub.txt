@@ -1551,12 +1551,12 @@ pets:AddSwitch("Auto Open Pet", function(bool)
     end
 end)
 
-local selectedAura = "Blue Aura"
+local selectedAura = "Entropic Blast"
 local auraDropdown = pets:AddDropdown("Select Aura", function(text)
     selectedAura = text
 end)
 
-auraDropdown:Add("Astral Electro")
+auraDropdown:Add("Entropic Blast")
 auraDropdown:Add("Azure Tundra")
 auraDropdown:Add("Blue Aura")
 auraDropdown:Add("Dark Electro")
@@ -1564,7 +1564,7 @@ auraDropdown:Add("Dark Lightning")
 auraDropdown:Add("Dark Storm")
 auraDropdown:Add("Electro")
 auraDropdown:Add("Enchanted Mirage")
-auraDropdown:Add("Entropic Blast")
+auraDropdown:Add("Astral Electro")
 auraDropdown:Add("Eternal Megastrike")
 auraDropdown:Add("Grand Supernova")
 auraDropdown:Add("Green Aura")
