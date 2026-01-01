@@ -2607,7 +2607,6 @@ fastStrengthFolder:AddSwitch("Hide All Frames", function(bool)
             obj.Visible = not bool
         end
     end
-end)
 
 -- Credits Tab Oluşturma
 local credits = window:AddTab("Credits")
