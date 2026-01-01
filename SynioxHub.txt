@@ -2573,10 +2573,9 @@ end)
 local autoEatEnabled = false
 
 local function eatProteinEgg()
-    local player = game.Players.LocalPlayer
+    local player = LocalPlayer
     local backpack = player:WaitForChild("Backpack")
     local character = player.Character or player.CharacterAdded:Wait()
-
     local egg = backpack:FindFirstChild("Protein Egg")
     if egg then
         egg.Parent = character
@@ -2597,7 +2596,7 @@ task.spawn(function()
     end
 end)
 
-fastStrenght:AddSwitch("Auto Eat Egg", function(state)
+fastStrenghtFolder:AddSwitch("Auto Eat Egg", function(state)
     autoEatEnabled = state
 end)
 
