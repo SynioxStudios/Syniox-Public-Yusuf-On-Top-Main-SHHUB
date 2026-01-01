@@ -133,7 +133,7 @@ end)
 -- JUNGLE GYM BÖLMESİ
 local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
 
--- E Tuşu Fonksiyonu
+-- E Tuşu Fonksiyonu (Hızlı Bas-Çek)
 local VIM = game:GetService("VirtualInputManager")
 local function pressEKey()
     VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
@@ -141,76 +141,7 @@ local function pressEKey()
     VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
 end
 
--- 1. Auto Bench Press
-local benchOn = false
-jungleFolder:AddSwitch("Auto Bench Press", function(bool)
-    benchOn = bool
-    if bool then
-        task.spawn(function()
-            local targetPos = Vector3.new(-8173, 64, 1898)
-            while benchOn do
-                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    if (root.Position - targetPos).Magnitude > 5 then
-                        root.CFrame = CFrame.new(targetPos)
-                        task.wait(0.3)
-                        pressEKey()
-                    end
-                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                end
-                task.wait(0.05)
-            end
-        end)
-    end
-end)
-
--- 2. Auto Squat
-local squatOn = false
-jungleFolder:AddSwitch("Auto Squat", function(bool)
-    squatOn = bool
-    if bool then
-        task.spawn(function()
-            local targetPos = Vector3.new(-8352, 34, 2878)
-            while squatOn do
-                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    if (root.Position - targetPos).Magnitude > 5 then
-                        root.CFrame = CFrame.new(targetPos)
-                        task.wait(0.3)
-                        pressEKey()
-                    end
-                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                end
-                task.wait(0.05)
-            end
-        end)
-    end
-end)
-
--- 3. Auto Boulder
-local boulderOn = false
-jungleFolder:AddSwitch("Auto Boulder", function(bool)
-    boulderOn = bool
-    if bool then
-        task.spawn(function()
-            local targetPos = Vector3.new(-8621, 34, 2684)
-            while boulderOn do
-                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    if (root.Position - targetPos).Magnitude > 5 then
-                        root.CFrame = CFrame.new(targetPos)
-                        task.wait(0.3)
-                        pressEKey()
-                    end
-                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                end
-                task.wait(0.05)
-            end
-        end)
-    end
-end)
-
--- 4. Auto Jungle Lift
+-- 1. Auto Jungle Lift
 local liftOn = false
 jungleFolder:AddSwitch("Auto Jungle Lift", function(bool)
     liftOn = bool
@@ -222,8 +153,78 @@ jungleFolder:AddSwitch("Auto Jungle Lift", function(bool)
                 if root then
                     if (root.Position - targetPos).Magnitude > 5 then
                         root.CFrame = CFrame.new(targetPos)
-                        task.wait(0.3)
+                        -- Işınlandığı anda binmek için E basar
                         pressEKey()
+                        task.wait(0.5) -- Binme animasyonu için kısa bir güvenlik payı
+                    end
+                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
+                end
+                task.wait(0.05)
+            end
+        end)
+    end
+end)
+
+-- 2. Auto Bench Press
+local benchOn = false
+jungleFolder:AddSwitch("Auto Bench Press", function(bool)
+    benchOn = bool
+    if bool then
+        task.spawn(function()
+            local targetPos = Vector3.new(-8173, 64, 1898)
+            while benchOn do
+                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    if (root.Position - targetPos).Magnitude > 5 then
+                        root.CFrame = CFrame.new(targetPos)
+                        pressEKey()
+                        task.wait(0.5)
+                    end
+                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
+                end
+                task.wait(0.05)
+            end
+        end)
+    end
+end)
+
+-- 3. Auto Squat
+local squatOn = false
+jungleFolder:AddSwitch("Auto Squat", function(bool)
+    squatOn = bool
+    if bool then
+        task.spawn(function()
+            local targetPos = Vector3.new(-8352, 34, 2878)
+            while squatOn do
+                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    if (root.Position - targetPos).Magnitude > 5 then
+                        root.CFrame = CFrame.new(targetPos)
+                        pressEKey()
+                        task.wait(0.5)
+                    end
+                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
+                end
+                task.wait(0.05)
+            end
+        end)
+    end
+end)
+
+-- 4. Auto Boulder
+local boulderOn = false
+jungleFolder:AddSwitch("Auto Boulder", function(bool)
+    boulderOn = bool
+    if bool then
+        task.spawn(function()
+            local targetPos = Vector3.new(-8621, 34, 2684)
+            while boulderOn do
+                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    if (root.Position - targetPos).Magnitude > 5 then
+                        root.CFrame = CFrame.new(targetPos)
+                        pressEKey()
+                        task.wait(0.5)
                     end
                     game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
                 end
@@ -2647,6 +2648,77 @@ fastStrengthFolder:AddSwitch("Hide All Frames", function(bool)
         if obj.Name:match("Frame$") then
             obj.Visible = not bool
         end
+    end
+end)
+
+local AutoGift = window:AddTab("Auto Gift")
+
+-- --- DEĞİŞKENLER ---
+local targetPlayer = ""
+local sendAmount = 1
+
+-- 1. ADIM: SAYACI EN ÜSTE EKLE
+local eggCountLabel = AutoGift:AddLabel("📦 Your Protein Eggs: 0")
+
+-- --- PROTEIN EGG SAYACI (Sürekli Güncellenir) ---
+task.spawn(function()
+    while true do
+        local p = game:GetService("Players").LocalPlayer
+        -- Muscle Legends'da Protein Egg sayısı genellikle bu yollardan birindedir:
+        local eggValue = p:FindFirstChild("ProteinEggs") or 
+                         (p:FindFirstChild("muscleData") and p.muscleData:FindFirstChild("ProteinEggs")) or
+                         (p:FindFirstChild("leaderstats") and p.leaderstats:FindFirstChild("Protein Eggs"))
+
+        if eggValue then
+            eggCountLabel:SetText("📦 Your Protein Eggs: " .. tostring(eggValue.Value))
+        else
+            eggCountLabel:SetText("📦 Your Protein Eggs: 0 (Not Found)")
+        end
+        task.wait(1) -- Her saniye kontrol et
+    end
+end)
+
+-- --- 2. ADIM: OYUNCU SEÇİMİ VE MİKTAR ---
+
+-- Oyuncu Seçme
+AutoGift:AddDropdown("Select Player", function(val)
+    targetPlayer = val
+end)
+
+-- Gönderilecek Adet
+AutoGift:AddTextBox("Amount to Gift", function(val)
+    sendAmount = tonumber(val) or 1
+end)
+
+-- --- 3. ADIM: GÖNDERME BUTONU ---
+
+AutoGift:AddButton("Gift Protein Eggs", function()
+    if targetPlayer == "" then 
+        warn("Lütfen bir oyuncu seçin!") 
+        return 
+    end
+
+    -- Muscle Legends'da eşya gönderme remote'u
+    local giftRemote = game:GetService("ReplicatedStorage").rEvents.giftItemRemote
+    
+    task.spawn(function()
+        -- Protein Egg bir güçlendirme olduğu için miktar ile gönderilir
+        giftRemote:InvokeServer("ProteinEgg", sendAmount, targetPlayer)
+        print(sendAmount .. " adet Protein Egg, " .. targetPlayer .. " kişisine gönderilmeye çalışıldı.")
+    end)
+end)
+
+-- Liste Güncelleme Döngüsü (Dropdown için)
+task.spawn(function()
+    while true do
+        local names = {}
+        for _, v in pairs(game.Players:GetPlayers()) do
+            if v.Name ~= game.Players.LocalPlayer.Name then
+                table.insert(names, v.Name)
+            end
+        end
+        -- UI kütüphanen destekliyorsa buraya Dropdown:Update(names) eklenebilir
+        task.wait(10)
     end
 end)
 
