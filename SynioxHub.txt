@@ -2596,7 +2596,7 @@ task.spawn(function()
     end
 end)
 
-fastStrenghtFolder:AddSwitch("🥚Auto Eat Egg 30 Min", function(state)
+fastStrengthFolder:AddSwitch("🥚Auto Eat Egg 30 Min", function(state)
     autoEatEnabled = state
 end)
 
