@@ -1,13 +1,13 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Byhalis/Gui-v8/main/v2"))()
 
--- Oyuncu bilgilerini alıyo
+-- Oyuncu bilgilerini alıyoruz
 local player = game.Players.LocalPlayer
 local displayName = player.DisplayName
 
 -- Gui Tasarım
-local window = library:AddWindow("SYNIOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.0 || HELLO - " .. displayName, {
+local window = library:AddWindow("SYNIOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.0 HELLO - " .. displayName, {
     main_color = Color3.fromRGB(0, 0, 0),
-    min_size = Vector2.new(700, 730),
+    min_size = Vector2.new(700, 750),
     can_resize = true,
 })
 
@@ -104,7 +104,8 @@ end)
 
 local handstandOn = false
 folder1:AddSwitch("Handstand", function(bool)
-    handstandOn = booltask.spawn(function()
+    handstandOn = bool
+    task.spawn(function()
         while handstandOn do
             local tool = game.Players.LocalPlayer.Backpack:FindFirstChild("Handstand")
             if tool then
@@ -127,109 +128,6 @@ folder1:AddSwitch("Situps", function(bool)
             task.wait(0.1)
         end
     end)
-end)
-
--- JUNGLE GYM BÖLMESİ
-local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
-
--- E Tuşu Fonksiyonu
-local VIM = game:GetService("VirtualInputManager")
-local function pressEKey()
-    VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
-    task.wait(0.05)
-    VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
-end
-
--- 1. Auto Bench Press
-local benchOn = false
-jungleFolder:AddSwitch("Auto Bench Press", function(bool)
-    benchOn = bool
-    if bool then
-        task.spawn(function()
-            local targetPos = Vector3.new(-8173, 64, 1898)
-            while benchOn do
-                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    if (root.Position - targetPos).Magnitude > 5 then
-                        root.CFrame = CFrame.new(targetPos)
-                        task.wait(0.3)
-                        pressEKey()
-                    end
-                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                end
-                task.wait(0.05)
-            end
-        end)
-    end
-end)
-
--- 2. Auto Squat
-local squatOn = false
-jungleFolder:AddSwitch("Auto Squat", function(bool)
-    squatOn = bool
-    if bool then
-        task.spawn(function()
-            local targetPos = Vector3.new(-8352, 34, 2878)
-            while squatOn do
-                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    if (root.Position - targetPos).Magnitude > 5 then
-                        root.CFrame = CFrame.new(targetPos)
-                        task.wait(0.3)
-                        pressEKey()
-                    end
-                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                end
-                task.wait(0.05)
-            end
-        end)
-    end
-end)
-
--- 3. Auto Boulder
-local boulderOn = false
-jungleFolder:AddSwitch("Auto Boulder", function(bool)
-    boulderOn = bool
-    if bool then
-        task.spawn(function()
-            local targetPos = Vector3.new(-8621, 34, 2684)
-            while boulderOn do
-                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    if (root.Position - targetPos).Magnitude > 5 then
-                        root.CFrame = CFrame.new(targetPos)
-                        task.wait(0.3)
-                        pressEKey()
-                    end
-                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                end
-                task.wait(0.05)
-            end
-        end)
-    end
-end)
-
--- 4. Auto Jungle Lift
-local liftOn = false
-jungleFolder:AddSwitch("Auto Jungle Lift", function(bool)
-    liftOn = bool
-    if bool then
-        task.spawn(function()
-            local targetPos = Vector3.new(-8642.396, 6.798, 2086.103)
-            while liftOn do
-                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    if (root.Position - targetPos).Magnitude > 5 then
-                        root.CFrame = CFrame.new(targetPos)
-                        task.wait(0.3)
-                        pressEKey()
-                    end
-                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                end
-                task.wait(0.05)
-            end
-        end)
-    end
 end)
 
 local function equipTool(toolName, character, backpack)
@@ -304,31 +202,26 @@ function gettool()
             game.Players.LocalPlayer.Character.Humanoid:EquipTool(v)
         end
     end
-    -- Eventleri 2şer kez ateşleyerek hızı artırıyoruz
-    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("punch", "leftHand")
-    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("punch", "rightHand")
     game:GetService("Players").LocalPlayer.muscleEvent:FireServer("punch", "leftHand")
     game:GetService("Players").LocalPlayer.muscleEvent:FireServer("punch", "rightHand")
 end
 
--- Hızlandırılmış Rock Switchleri
 Rock:AddSwitch("Tiny Rock", function(Value)
     selectrock = "Tiny Island Rock"
     getgenv().autoFarm = Value
+    
     task.spawn(function()
         while getgenv().autoFarm do
-            task.wait(0.01) -- Bekleme süresi minimuma indirildi
+            task.wait()
             if not getgenv().autoFarm then break end
+            
             if game:GetService("Players").LocalPlayer.Durability.Value >= 0 then
                 for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
                     if v.Name == "neededDurability" and v.Value == 0 and game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-                        -- Vuruş hızı x3 yapıldı
-                        for _ = 1, 3 do
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-                        end
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
                         gettool()
                     end
                 end
@@ -340,19 +233,19 @@ end)
 Rock:AddSwitch("Starter Rock", function(Value)
     selectrock = "Starter Island Rock"
     getgenv().autoFarm = Value
+    
     task.spawn(function()
         while getgenv().autoFarm do
-            task.wait(0.01)
+            task.wait()
             if not getgenv().autoFarm then break end
+            
             if game:GetService("Players").LocalPlayer.Durability.Value >= 100 then
                 for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
                     if v.Name == "neededDurability" and v.Value == 100 and game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-                        for _ = 1, 3 do
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-                        end
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
                         gettool()
                     end
                 end
@@ -364,19 +257,19 @@ end)
 Rock:AddSwitch("Legend Beach Rock", function(Value)
     selectrock = "Legend Beach Rock"
     getgenv().autoFarm = Value
+    
     task.spawn(function()
         while getgenv().autoFarm do
-            task.wait(0.01)
+            task.wait()
             if not getgenv().autoFarm then break end
+            
             if game:GetService("Players").LocalPlayer.Durability.Value >= 5000 then
                 for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
                     if v.Name == "neededDurability" and v.Value == 5000 and game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-                        for _ = 1, 3 do
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-                        end
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
                         gettool()
                     end
                 end
@@ -388,19 +281,19 @@ end)
 Rock:AddSwitch("Frozen Rock", function(Value)
     selectrock = "Frost Gym Rock"
     getgenv().autoFarm = Value
+    
     task.spawn(function()
         while getgenv().autoFarm do
-            task.wait(0.01)
+            task.wait()
             if not getgenv().autoFarm then break end
+            
             if game:GetService("Players").LocalPlayer.Durability.Value >= 150000 then
                 for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
                     if v.Name == "neededDurability" and v.Value == 150000 and game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-                        for _ = 1, 3 do
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-                        end
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
                         gettool()
                     end
                 end
@@ -412,19 +305,19 @@ end)
 Rock:AddSwitch("Mythical Rock", function(Value)
     selectrock = "Mythical Gym Rock"
     getgenv().autoFarm = Value
+    
     task.spawn(function()
         while getgenv().autoFarm do
-            task.wait(0.01)
+            task.wait()
             if not getgenv().autoFarm then break end
+            
             if game:GetService("Players").LocalPlayer.Durability.Value >= 400000 then
                 for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
                     if v.Name == "neededDurability" and v.Value == 400000 and game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-                        for _ = 1, 3 do
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-                        end
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
                         gettool()
                     end
                 end
@@ -436,19 +329,19 @@ end)
 Rock:AddSwitch("Eternal Rock", function(Value)
     selectrock = "Eternal Gym Rock"
     getgenv().autoFarm = Value
+    
     task.spawn(function()
         while getgenv().autoFarm do
-            task.wait(0.01)
+            task.wait()
             if not getgenv().autoFarm then break end
+            
             if game:GetService("Players").LocalPlayer.Durability.Value >= 750000 then
                 for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
                     if v.Name == "neededDurability" and v.Value == 750000 and game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-                        for _ = 1, 3 do
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-                        end
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
                         gettool()
                     end
                 end
@@ -460,19 +353,19 @@ end)
 Rock:AddSwitch("Legend Rock", function(Value)
     selectrock = "Legend Gym Rock"
     getgenv().autoFarm = Value
+    
     task.spawn(function()
         while getgenv().autoFarm do
-            task.wait(0.01)
+            task.wait()
             if not getgenv().autoFarm then break end
+            
             if game:GetService("Players").LocalPlayer.Durability.Value >= 1000000 then
                 for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
                     if v.Name == "neededDurability" and v.Value == 1000000 and game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-                        for _ = 1, 3 do
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-                        end
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
                         gettool()
                     end
                 end
@@ -484,19 +377,19 @@ end)
 Rock:AddSwitch("Muscle King Rock", function(Value)
     selectrock = "Muscle King Gym Rock"
     getgenv().autoFarm = Value
+    
     task.spawn(function()
         while getgenv().autoFarm do
-            task.wait(0.01)
+            task.wait()
             if not getgenv().autoFarm then break end
+            
             if game:GetService("Players").LocalPlayer.Durability.Value >= 5000000 then
                 for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
                     if v.Name == "neededDurability" and v.Value == 5000000 and game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-                        for _ = 1, 3 do
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-                        end
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
                         gettool()
                     end
                 end
@@ -508,19 +401,19 @@ end)
 Rock:AddSwitch("Jungle Rock", function(Value)
     selectrock = "Ancient Jungle Rock"
     getgenv().autoFarm = Value
+    
     task.spawn(function()
         while getgenv().autoFarm do
-            task.wait(0.01)
+            task.wait()
             if not getgenv().autoFarm then break end
+            
             if game:GetService("Players").LocalPlayer.Durability.Value >= 10000000 then
                 for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
                     if v.Name == "neededDurability" and v.Value == 10000000 and game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-                        for _ = 1, 3 do
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-                        end
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+                        firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
                         gettool()
                     end
                 end
@@ -1551,12 +1444,12 @@ pets:AddSwitch("Auto Open Pet", function(bool)
     end
 end)
 
-local selectedAura = "Entropic Blast"
+local selectedAura = "Blue Aura"
 local auraDropdown = pets:AddDropdown("Select Aura", function(text)
     selectedAura = text
 end)
 
-auraDropdown:Add("Entropic Blast")
+auraDropdown:Add("Astral Electro")
 auraDropdown:Add("Azure Tundra")
 auraDropdown:Add("Blue Aura")
 auraDropdown:Add("Dark Electro")
@@ -1564,7 +1457,7 @@ auraDropdown:Add("Dark Lightning")
 auraDropdown:Add("Dark Storm")
 auraDropdown:Add("Electro")
 auraDropdown:Add("Enchanted Mirage")
-auraDropdown:Add("Astral Electro")
+auraDropdown:Add("Entropic Blast")
 auraDropdown:Add("Eternal Megastrike")
 auraDropdown:Add("Grand Supernova")
 auraDropdown:Add("Green Aura")
@@ -1866,111 +1759,111 @@ end)
 
 local Misc = window:AddTab("Misc")
 
-local antiAfkConnection = nil 
+Misc:AddButton("Anti Afk", function()
+    -- Arka Plan Anti-AFK (VirtualUser)
+    local vu = game:GetService("VirtualUser")
+    game:GetService("Players").LocalPlayer.Idled:Connect(function()
+        vu:CaptureController()
+        vu:ClickButton2(Vector2.new())
+    end)
 
-Misc:AddSwitch("Anti Afk", function(Value)
-    if Value then
-        -- --- AÇILDIĞINDA ---
-        _G.AntiAfkActive = true
+    -- GUI Oluşturma
+    local ScreenGui = Instance.new("ScreenGui")
+    local MainFrame = Instance.new("Frame")
+    local UICorner = Instance.new("UICorner")
+    local Title = Instance.new("TextLabel")
+    local Separator = Instance.new("Frame")
+    local TimerLabel = Instance.new("TextLabel")
+    local FPSLabel = Instance.new("TextLabel")
+    local MSLabel = Instance.new("TextLabel") -- MS için yeni etiket
+    local UIStroke = Instance.new("UIStroke")
+
+    ScreenGui.Parent = game:GetService("CoreGui")
+    
+    -- Ana Panel (Boyutu MS eklendiği için biraz büyütüldü: 140x165)
+    MainFrame.Name = "Syniox_AntiAFK"
+    MainFrame.Parent = ScreenGui
+    MainFrame.BackgroundColor3 = Color3.fromRGB(8, 8, 8) 
+    MainFrame.Position = UDim2.new(0.05, 0, 0.4, 0)
+    MainFrame.Size = UDim2.new(0, 140, 0, 165)
+    MainFrame.Active = true
+    MainFrame.Draggable = true 
+
+    UICorner.CornerRadius = UDim.new(0, 10)
+    UICorner.Parent = MainFrame
+
+    UIStroke.Parent = MainFrame
+    UIStroke.Color = Color3.fromRGB(130, 0, 0) 
+    UIStroke.Thickness = 2
+
+    -- BAŞLIK: Syniox Public
+    Title.Parent = MainFrame
+    Title.Size = UDim2.new(1, 0, 0, 35)
+    Title.Text = "Syniox Public" 
+    Title.TextColor3 = Color3.fromRGB(200, 0, 0)
+    Title.BackgroundTransparency = 1
+    Title.TextSize = 16 -- Başlık büyütüldü
+    Title.Font = Enum.Font.SourceSansBold
+
+    -- Çizgi
+    Separator.Parent = MainFrame
+    Separator.BackgroundColor3 = Color3.fromRGB(130, 0, 0)
+    Separator.BorderSizePixel = 0
+    Separator.Position = UDim2.new(0.1, 0, 0, 35)
+    Separator.Size = UDim2.new(0.8, 0, 0, 1)
+
+    -- Süre (BÜYÜTÜLDÜ)
+    TimerLabel.Parent = MainFrame
+    TimerLabel.Position = UDim2.new(0, 0, 0, 45)
+    TimerLabel.Size = UDim2.new(1, 0, 0, 35)
+    TimerLabel.Text = "⏳ Sure: 00:00"
+    TimerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TimerLabel.BackgroundTransparency = 1
+    TimerLabel.TextSize = 17 -- Yazı boyutu büyütüldü
+    TimerLabel.Font = Enum.Font.SourceSansSemibold
+
+    -- FPS (BÜYÜTÜLDÜ)
+    FPSLabel.Parent = MainFrame
+    FPSLabel.Position = UDim2.new(0, 0, 0, 80)
+    FPSLabel.Size = UDim2.new(1, 0, 0, 35)
+    FPSLabel.Text = "🚀 FPS: 0"
+    FPSLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    FPSLabel.BackgroundTransparency = 1
+    FPSLabel.TextSize = 17 -- Yazı boyutu büyütüldü
+    FPSLabel.Font = Enum.Font.SourceSansSemibold
+
+    -- MS / PING (YENİ EKLENDİ)
+    MSLabel.Parent = MainFrame
+    MSLabel.Position = UDim2.new(0, 0, 0, 115)
+    MSLabel.Size = UDim2.new(1, 0, 0, 35)
+    MSLabel.Text = "📡 MS: 0"
+    MSLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    MSLabel.BackgroundTransparency = 1
+    MSLabel.TextSize = 17 -- Yazı boyutu büyütüldü
+    MSLabel.Font = Enum.Font.SourceSansSemibold
+
+    -- Canlı Güncelleme
+    local startTime = os.time()
+    local lastUpdate = 0
+    
+    game:GetService("RunService").RenderStepped:Connect(function(dt)
+        -- Süre Güncelleme
+        local diff = os.time() - startTime
+        TimerLabel.Text = string.format("⏳ Sure: %02d:%02d:%02d", math.floor(diff/3600), math.floor((diff%3600)/60), diff%60)
         
-        -- Anti-AFK Mekanizması
-        local vu = game:GetService("VirtualUser")
-        antiAfkConnection = game:GetService("Players").LocalPlayer.Idled:Connect(function()
-            if _G.AntiAfkActive then
-                vu:CaptureController()
-                vu:ClickButton2(Vector2.new())
-            end
-        end)
-
-        -- GUI Oluşturma
-        local ScreenGui = Instance.new("ScreenGui")
-        local MainFrame = Instance.new("Frame")
-        local UICorner = Instance.new("UICorner")
-        local Title = Instance.new("TextLabel")
-        local Separator = Instance.new("Frame")
-        local TimerLabel = Instance.new("TextLabel")
-        local FPSLabel = Instance.new("TextLabel")
-        local MSLabel = Instance.new("TextLabel")
-        local UIStroke = Instance.new("UIStroke")
-
-        ScreenGui.Name = "Syniox_AntiAFK"
-        ScreenGui.Parent = game:GetService("CoreGui")
-        
-        -- Panel: 120x125 Boyutunda ve Koyu Siyah
-        MainFrame.Parent = ScreenGui
-        MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) 
-        MainFrame.BackgroundTransparency = 0.1 -- Kapalı siyah
-        MainFrame.Position = UDim2.new(0.05, 0, 0.4, 0)
-        MainFrame.Size = UDim2.new(0, 120, 0, 125) -- İstediğin boyut
-        MainFrame.Active = true
-        MainFrame.Draggable = true 
-
-        UICorner.CornerRadius = UDim.new(0, 8)
-        UICorner.Parent = MainFrame
-
-        UIStroke.Parent = MainFrame
-        UIStroke.Color = Color3.fromRGB(150, 0, 0) 
-        UIStroke.Thickness = 1.5
-
-        -- Başlık
-        Title.Parent = MainFrame
-        Title.Size = UDim2.new(1, 0, 0, 28)
-        Title.Text = "Syniox Public" 
-        Title.TextColor3 = Color3.fromRGB(200, 0, 0)
-        Title.BackgroundTransparency = 1
-        Title.TextSize = 15
-        Title.Font = Enum.Font.SourceSansBold
-
-        Separator.Parent = MainFrame
-        Separator.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
-        Separator.BorderSizePixel = 0
-        Separator.Position = UDim2.new(0.1, 0, 0, 28)
-        Separator.Size = UDim2.new(0.8, 0, 0, 1)
-
-        -- Bilgi Etiketleri (Yazılar Korunarak Sığdırıldı)
-        local function SetupLabel(lbl, text, pos)
-            lbl.Parent = MainFrame
-            lbl.Position = pos
-            lbl.Size = UDim2.new(1, 0, 0, 25)
-            lbl.Text = text
-            lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
-            lbl.BackgroundTransparency = 1
-            lbl.TextSize = 16
-            lbl.Font = Enum.Font.SourceSansBold
-            lbl.TextXAlignment = Enum.TextXAlignment.Center
+        -- FPS ve MS Güncelleme (0.5 saniyede bir)
+        lastUpdate = lastUpdate + dt
+        if lastUpdate >= 0.5 then
+            -- FPS Hesapla
+            FPSLabel.Text = "🚀 FPS: " .. math.floor(1/dt)
+            
+            -- MS Hesapla (Stats servisinden Ping çekilir)
+            local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
+            MSLabel.Text = "📡 MS: " .. ping
+            
+            lastUpdate = 0
         end
-
-        SetupLabel(TimerLabel, "⏳ Sure: 00:00:00", UDim2.new(0, 0, 0, 35))
-        SetupLabel(FPSLabel, "🚀 FPS: 0", UDim2.new(0, 0, 0, 62))
-        SetupLabel(MSLabel, "📡 MS: 0", UDim2.new(0, 0, 0, 89))
-
-        -- Güncelleme Döngüsü
-        local startTime = os.time()
-        local lastUpdate = 0
-        
-        task.spawn(function()
-            while _G.AntiAfkActive do
-                local dt = task.wait(0.1)
-                local diff = os.time() - startTime
-                TimerLabel.Text = string.format("⏳ Sure: %02d:%02d:%02d", math.floor(diff/3600), math.floor((diff%3600)/60), diff%60)
-                
-                lastUpdate = lastUpdate + dt
-                if lastUpdate >= 0.5 then
-                    FPSLabel.Text = "🚀 FPS: " .. math.floor(1/dt)
-                    local ping = math.floor(game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue())
-                    MSLabel.Text = "📡 MS: " .. ping
-                    lastUpdate = 0
-                end
-            end
-        end)
-
-    else
-        -- --- KAPATILDIĞINDA ---
-        _G.AntiAfkActive = false
-        if antiAfkConnection then antiAfkConnection:Disconnect() end
-        local oldGui = game:GetService("CoreGui"):FindFirstChild("Syniox_AntiAFK")
-        if oldGui then oldGui:Destroy() end
-    end
+    end)
 end)
 
 local switch = Misc:AddSwitch("Lock Position", function(Value)
@@ -2211,9 +2104,9 @@ Misc:AddSwitch("Auto Clear Inventory", function(state)
     autoEatBoostsEnabled = state
 end)
 
-local packFarming = window:AddTab("Pack Farm")
+local tabFarming = window:AddTab("Fast Farm")
 
-packFarming:AddLabel("Fast Farming").TextSize = 23
+tabFarming:AddLabel("Fast Farming").TextSize = 23
 
 local player = game.Players.LocalPlayer
 local muscleEvent = player:WaitForChild("muscleEvent")
@@ -2242,7 +2135,7 @@ local function fastRepLoop()
     end
 end
 
-packFarming:AddSwitch("Fast Strength", function(state)
+tabFarming:AddSwitch("Fast Strength", function(state)
     runFastRep = state
     if runFastRep then
         task.spawn(fastRepLoop)
@@ -2251,7 +2144,7 @@ packFarming:AddSwitch("Fast Strength", function(state)
     end
 end)
 
-packFarming:AddLabel("Useful").TextSize = 23
+tabFarming:AddLabel("Useful").TextSize = 23
 
 local autoEatEnabled = false
 local lastEggTime = 0
@@ -2303,11 +2196,11 @@ task.spawn(function()
     end
 end)
 
-packFarming:AddSwitch("Auto Eat Eggs", function(state)
+tabFarming:AddSwitch("Auto Eat Eggs", function(state)
     autoEatEnabled = state
 end)
 
-packFarming:AddSwitch("Hide All Frames", function(bool)
+tabFarming:AddSwitch("Hide All Frames", function(bool)
     local rSto = game:GetService("ReplicatedStorage")
     for _, obj in pairs(rSto:GetChildren()) do
         if obj.Name:match("Frame$") then
@@ -2316,7 +2209,7 @@ packFarming:AddSwitch("Hide All Frames", function(bool)
     end
 end)
 
-packFarming:AddButton("Full Optimization", function()
+tabFarming:AddButton("Full Optimization", function()
     local player = game.Players.LocalPlayer
     local playerGui = player:WaitForChild("PlayerGui")
     local lighting = game:GetService("Lighting")
@@ -2389,7 +2282,7 @@ packFarming:AddButton("Full Optimization", function()
     darkenSky()
 end)
 
-packFarming:AddLabel("Fast Rebirths").TextSize = 23
+tabFarming:AddLabel("Fast Rebirths").TextSize = 23
 
 local fastStrengthFolder = tabFarming:AddFolder("Fast Rebirths Functions")
 
@@ -2596,7 +2489,7 @@ task.spawn(function()
     end
 end)
 
-fastStrenghtFolder:AddSwitch("Auto Eat Egg", function(state)
+fastStrenghtFolder:AddSwitch("🥚Auto Eat Egg 30 Min", function(state)
     autoEatEnabled = state
 end)
 
@@ -2609,12 +2502,11 @@ fastStrengthFolder:AddSwitch("Hide All Frames", function(bool)
     end
 end)
 
--- Credits Tab Oluşturma
-local credıts = window:AddTab("Credıts")
--- İçerik Etiketleri
-credıts:AddLabel("👑 Script Made By Yusuf")
-credıts:AddLabel("🚀 Syniox V2")
-credıts:AddLabel("🤝 Special Thanks // HALIS")
-credıts:AddLabel("📜 Developed By Yusuf")
-credıts:AddLabel("❤️ TY For Helping To Halis")
-credıts:AddLabel("✨ Thank For Using This Script")
+local credits = window:AddTab("Credits")
+
+credits:AddLabel("Script Made ByYusuf")
+credits:AddLabel("Syniox V2")
+credits:AddLabel("Those Who Helped Yusuf // HALIS")
+credits:AddLabel("Script ByYusuf")
+credits:AddLabel("TY For Helping To Halıs ❤️")
+credits:AddLabel("Thank For Using This Script")
