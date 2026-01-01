@@ -2596,10 +2596,6 @@ task.spawn(function()
     end
 end)
 
-fastStrengthFolder:AddSwitch("🥚Auto Eat Egg 30 Min", function(state)
-    autoEatEnabled = state
-end)
-
 fastStrengthFolder:AddSwitch("Hide All Frames", function(bool)
     local rSto = game:GetService("ReplicatedStorage")
     for _, obj in pairs(rSto:GetChildren()) do
