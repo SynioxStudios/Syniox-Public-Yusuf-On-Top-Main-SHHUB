@@ -2607,6 +2607,7 @@ fastStrengthFolder:AddSwitch("Hide All Frames", function(bool)
             obj.Visible = not bool
         end
     end
+end)
 
 -- Credits Tab Oluşturma
 local credits = window:AddTab("Credits")
@@ -2618,7 +2619,3 @@ credits:AddLabel("🤝 Special Thanks // HALIS")
 credits:AddLabel("📜 Developed By Yusuf")
 credits:AddLabel("❤️ TY For Helping To Halis")
 credits:AddLabel("✨ Thank For Using This Script")
-
--- EĞER HALA GELMİYORSA:
--- Kullandığın kütüphaneye göre scriptin en sonuna şunlardan biri gerekebilir:
--- window:Show() -- Bazı kütüphanelerde menüyü göstermek için gerekir.
