@@ -2657,68 +2657,75 @@ local AutoGift = window:AddTab("Auto Gift")
 local targetPlayer = ""
 local sendAmount = 1
 
--- 1. ADIM: SAYACI EN ÜSTE EKLE
-local eggCountLabel = AutoGift:AddLabel("📦 Your Protein Eggs: 0")
+-- --- 1. ÜST BÖLÜM (PROTEIN EGG) ---
+local eggCountLabel = AutoGift:AddLabel("🥚 Your Protein Eggs: 0")
 
--- --- PROTEIN EGG SAYACI (Sürekli Güncellenir) ---
-task.spawn(function()
-    while true do
-        local p = game:GetService("Players").LocalPlayer
-        -- Muscle Legends'da Protein Egg sayısı genellikle bu yollardan birindedir:
-        local eggValue = p:FindFirstChild("ProteinEggs") or 
-                         (p:FindFirstChild("muscleData") and p.muscleData:FindFirstChild("ProteinEggs")) or
-                         (p:FindFirstChild("leaderstats") and p.leaderstats:FindFirstChild("Protein Eggs"))
-
-        if eggValue then
-            eggCountLabel:SetText("📦 Your Protein Eggs: " .. tostring(eggValue.Value))
-        else
-            eggCountLabel:SetText("📦 Your Protein Eggs: 0 (Not Found)")
-        end
-        task.wait(1) -- Her saniye kontrol et
-    end
-end)
-
--- --- 2. ADIM: OYUNCU SEÇİMİ VE MİKTAR ---
-
--- Oyuncu Seçme
+-- --- 2. AYARLAR ---
 AutoGift:AddDropdown("Select Player", function(val)
     targetPlayer = val
 end)
 
--- Gönderilecek Adet
+-- --- 3. ALT BÖLÜM (TROPICAL SHAKE VE MİKTAR) ---
+-- İstediğin gibi: Sayacı tam miktar kutusunun üzerine koyduk
+local shakeCountLabel = AutoGift:AddLabel("🍍 Your Tropical Shakes: 0")
+
 AutoGift:AddTextBox("Amount to Gift", function(val)
     sendAmount = tonumber(val) or 1
 end)
 
--- --- 3. ADIM: GÖNDERME BUTONU ---
-
-AutoGift:AddButton("Gift Protein Eggs", function()
-    if targetPlayer == "" then 
-        warn("Lütfen bir oyuncu seçin!") 
-        return 
-    end
-
-    -- Muscle Legends'da eşya gönderme remote'u
-    local giftRemote = game:GetService("ReplicatedStorage").rEvents.giftItemRemote
-    
-    task.spawn(function()
-        -- Protein Egg bir güçlendirme olduğu için miktar ile gönderilir
-        giftRemote:InvokeServer("ProteinEgg", sendAmount, targetPlayer)
-        print(sendAmount .. " adet Protein Egg, " .. targetPlayer .. " kişisine gönderilmeye çalışıldı.")
-    end)
-end)
-
--- Liste Güncelleme Döngüsü (Dropdown için)
+-- --- SAYAÇ GÜNCELLEME DÖNGÜSÜ ---
 task.spawn(function()
     while true do
-        local names = {}
-        for _, v in pairs(game.Players:GetPlayers()) do
-            if v.Name ~= game.Players.LocalPlayer.Name then
-                table.insert(names, v.Name)
+        local p = game:GetService("Players").LocalPlayer
+        local data = p:FindFirstChild("muscleData") or p
+        
+        -- Protein Egg Sayısı
+        local eggVal = data:FindFirstChild("ProteinEggs")
+        eggCountLabel:SetText("🥚 Your Protein Eggs: " .. (eggVal and tostring(eggVal.Value) or "0"))
+        
+        -- Tropical Shake Sayısı
+        local shakeVal = data:FindFirstChild("TropicalShakes")
+        shakeCountLabel:SetText("🍍 Your Tropical Shakes: " .. (shakeVal and tostring(shakeVal.Value) or "0"))
+        
+        task.wait(1)
+    end
+end)
+
+-- --- 4. AUTO GIFT SWITCHLERİ ---
+
+-- Protein Egg Switch
+local autoGiftEgg = false
+AutoGift:AddSwitch("🎁 Auto Gift Protein Egg", function(state)
+    autoGiftEgg = state
+    if state then
+        task.spawn(function()
+            while autoGiftEgg do
+                if targetPlayer ~= "" then
+                    game:GetService("ReplicatedStorage").rEvents.giftItemRemote:InvokeServer("ProteinEgg", sendAmount, targetPlayer)
+                    task.wait(1)
+                else
+                    task.wait(2)
+                end
             end
-        end
-        -- UI kütüphanen destekliyorsa buraya Dropdown:Update(names) eklenebilir
-        task.wait(10)
+        end)
+    end
+end)
+
+-- Tropical Shake Switch
+local autoGiftShake = false
+AutoGift:AddSwitch("🍍 Auto Gift Tropical Shake", function(state)
+    autoGiftShake = state
+    if state then
+        task.spawn(function()
+            while autoGiftShake do
+                if targetPlayer ~= "" then
+                    game:GetService("ReplicatedStorage").rEvents.giftItemRemote:InvokeServer("TropicalShake", sendAmount, targetPlayer)
+                    task.wait(1)
+                else
+                    task.wait(2)
+                end
+            end
+        end)
     end
 end)
 
