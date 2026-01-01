@@ -2732,14 +2732,14 @@ end)
 local credits = window:AddTab("Credits")
 
 -- Ana Bilgiler
-credits:AddLabel("✨ Syniox V2")
-credits:AddLabel("👤 Developer: Yusuf")
+credits:AddLabel("<font size='20'>✨ Syniox V2</font>")
+credits:AddLabel("<font size='20'>👤 Developer: Yusuf</font>")
 
 -- Teşekkür Bölümü
-credits:AddLabel("--------------------------")
-credits:AddLabel("🤝 Special Thanks to: Halis")
-credits:AddLabel("❤️ Thanks for the support!")
+credits:AddLabel("<font size='20'>--------------------------</font>")
+credits:AddLabel("<font size='20'>🤝 Special Thanks to: Halis</font>")
+credits:AddLabel("<font size='20'>❤️ Thanks for the support!</font>")
 
 -- Kapanış
-credits:AddLabel("--------------------------")
-credits:AddLabel("🙏 Thank you for using Syniox!")
+credits:AddLabel("<font size='20'>--------------------------</font>")
+credits:AddLabel("<font size='20'>🙏 Thank you for using Syniox!</font>")
