@@ -137,7 +137,7 @@ local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
 local VIM = game:GetService("VirtualInputManager")
 local function pressEKey()
     VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
-    task.wait(0.05)
+    task.wait(1)
     VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
 end
 
@@ -155,11 +155,11 @@ jungleFolder:AddSwitch("Auto Jungle Lift", function(bool)
                         root.CFrame = CFrame.new(targetPos)
                         -- Işınlandığı anda binmek için E basar
                         pressEKey()
-                        task.wait(0.5) -- Binme animasyonu için kısa bir güvenlik payı
+                        task.wait(1) -- Binme animasyonu için kısa bir güvenlik payı
                     end
                     game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
                 end
-                task.wait(0.05)
+                task.wait(1)
             end
         end)
     end
@@ -1866,66 +1866,80 @@ teleport:AddButton("📍Brawl Regular", function()
     })
 end)
 
-local Gym = window:AddTab("GYM)
-
-local SelectPlayerName = ""
-
-local PlayerDrop = LookDura:AddDropdown("Select Player", function(Value)
-    SelectPlayerName = Value:match("| (.+)")
-    previousValues = {}
-end)
-
-local Playerslist = {}
-for _, Plr in pairs(game:GetService("Players"):GetPlayers()) do
-    local displayName = Plr.DisplayName .. " | " .. Plr.Name
-    table.insert(Playerslist, displayName)
-end
-for _, AddPlr in ipairs(Playerslist) do
-    PlayerDrop:Add(AddPlr)
-end
-
-local function FormatNumberWithCommas(number)
-    local formatted = tostring(number):reverse():gsub("(%d%d%d)", "%1,"):reverse()
-    return formatted:gsub("^,", "")
-end
-
+local Gym = window:AddTab("GYM")
 local VIM = game:GetService("VirtualInputManager")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
+-- Global değişken (Scripti durdurup başlatmak için)
+getgenv().working = false
+
+-- E Tuşuna Basma Fonksiyonu (Alete binmek için)
 local function pressEKey()
-    VIM:SendKeyEvent(true, "E", false, game)
+    VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
     task.wait(0.1)
-    VIM:SendKeyEvent(false, "E", false, game)
+    VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
 end
 
+-- Otomatik Ağırlık Kaldırma (Senin muscleEvent sistemin)
 local function autoLift()
     while getgenv().working do
-        LocalPlayer.muscleEvent:FireServer("rep")
-        task.wait()
+        -- Oyunun kendi event'ini tetikler
+        if LocalPlayer:FindFirstChild("muscleEvent") then
+            LocalPlayer.muscleEvent:FireServer("rep")
+        end
+        task.wait(0.1) -- Çok hızlı olup kick yememesi için küçük bir bekleme
     end
 end
 
-local function teleportAndStart(machineName, position)
+-- Işınlanma, Binme ve Başlatma Fonksiyonu
+local function teleportAndStart(targetCFrame)
     local character = LocalPlayer.Character
     if character and character:FindFirstChild("HumanoidRootPart") then
-        character.HumanoidRootPart.CFrame = position
-        task.wait(0.1)
+        character.HumanoidRootPart.CFrame = targetCFrame
+        task.wait(0.3) -- Işınlanma sonrası oyunun algılaması için kısa süre
         pressEKey()
         task.spawn(autoLift)
     end
 end
 
-fastStrengthFolder:AddSwitch("MUSCLE KING GYM", function(bool)
-    if getgenv().working and not bool then
-        getgenv().working = false
-        return
-    end
+-- MUSCLE KING GYM Bölümü
+Gym:AddSwitch("MUSCLE KING GYM", function(bool)
     getgenv().working = bool
+    
     if bool then
-        teleportAndStart("Pull Up", CFrame.new(-8772 53 -5662)
+        -- Koordinatları CFrame.new(x, y, z) formatında düzelttim
+        local targetPos = CFrame.new(-8772, 53, -5662) 
+        teleportAndStart(targetPos)
+    else
+        print("Antrenman Durduruldu.")
     end
 end)
+
+local Misc = window:AddTab("Misc")
+
+Misc:AddButton("Redeem All Muscle Codes", function()
+    local remote = game:GetService("ReplicatedStorage").rEvents.codeRemote
+    local codes = {
+        Misc:AddButton("Redeem All Muscle Codes", function()
+    local remote = game:GetService("ReplicatedStorage").rEvents.codeRemote
+    local codes = {
+        "musclestorm50", 
+        "spacegems50", 
+        "megalift50", 
+        "speedy50", 
+        "skybloom75", 
+        "galaxycrystal50", 
+        "supermuscle100", 
+        "superpunch100", 
+        "epicreward500", 
+        "launch250", 
+        "froerse()
+    return formatted:gsub("^,", "")
+end
+
+local VIM = game:GetService("VirtualInputManager")
+
 
 local Misc = window:AddTab("Misc")
 
