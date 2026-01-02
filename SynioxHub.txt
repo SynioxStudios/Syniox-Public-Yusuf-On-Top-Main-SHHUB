@@ -1866,56 +1866,6 @@ teleport:AddButton("📍Brawl Regular", function()
     })
 end)
 
-local Gym = window:AddTab("GYM")
-local VIM = game:GetService("VirtualInputManager")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
--- Global değişken (Scripti durdurup başlatmak için)
-getgenv().working = false
-
--- E Tuşuna Basma Fonksiyonu (Alete binmek için)
-local function pressEKey()
-    VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
-    task.wait(0.1)
-    VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
-end
-
--- Otomatik Ağırlık Kaldırma (Senin muscleEvent sistemin)
-local function autoLift()
-    while getgenv().working do
-        -- Oyunun kendi event'ini tetikler
-        if LocalPlayer:FindFirstChild("muscleEvent") then
-            LocalPlayer.muscleEvent:FireServer("rep")
-        end
-        task.wait(0.1) -- Çok hızlı olup kick yememesi için küçük bir bekleme
-    end
-end
-
--- Işınlanma, Binme ve Başlatma Fonksiyonu
-local function teleportAndStart(targetCFrame)
-    local character = LocalPlayer.Character
-    if character and character:FindFirstChild("HumanoidRootPart") then
-        character.HumanoidRootPart.CFrame = targetCFrame
-        task.wait(0.3) -- Işınlanma sonrası oyunun algılaması için kısa süre
-        pressEKey()
-        task.spawn(autoLift)
-    end
-end
-
--- MUSCLE KING GYM Bölümü
-Gym:AddSwitch("MUSCLE KING GYM", function(bool)
-    getgenv().working = bool
-    
-    if bool then
-        -- Koordinatları CFrame.new(x, y, z) formatında düzelttim
-        local targetPos = CFrame.new(-8772, 53, -5662) 
-        teleportAndStart(targetPos)
-    else
-        print("Antrenman Durduruldu.")
-    end
-end)
-
 local Misc = window:AddTab("Misc")
 
 Misc:AddButton("Redeem All Muscle Codes", function()
@@ -2757,14 +2707,6 @@ task.spawn(function()
         -- Protein Egg Sayısı
         local eggVal = data:FindFirstChild("ProteinEggs")
         eggCountLabel:SetText("🥚 Your Protein Eggs: " .. (eggVal and tostring(eggVal.Value) or "0"))
-        
-        -- Tropical Shake Sayısı
-        local shakeVal = data:FindFirstChild("TropicalShakes")
-        shakeCountLabel:SetText("🍍 Your Tropical Shakes: " .. (shakeVal and tostring(shakeVal.Value) or "0"))
-        
-        task.wait(1)
-    end
-end)
 
 -- --- 4. AUTO GIFT SWITCHLERİ ---
 
@@ -2783,6 +2725,14 @@ AutoGift:AddSwitch("🎁 Auto Gift Protein Egg", function(state)
                 end
             end
         end)
+    end
+end)
+
+        -- Tropical Shake Sayısı
+        local shakeVal = data:FindFirstChild("TropicalShakes")
+        shakeCountLabel:SetText("🍍 Your Tropical Shakes: " .. (shakeVal and tostring(shakeVal.Value) or "0"))
+        
+        task.wait(1)
     end
 end)
 
@@ -2807,14 +2757,14 @@ end)
 local credits = window:AddTab("Credits")
 
 -- Ana Bilgiler
-credits:AddLabel("<font size='20'>✨ Syniox V2</font>")
-credits:AddLabel("<font size='20'>👤 Developer: Yusuf</font>")
+credits:AddLabel("✨ Syniox V2")
+credits:AddLabel("👤 Developer: Yusuf")
 
 -- Teşekkür Bölümü
-credits:AddLabel("<font size='20'>--------------------------</font>")
-credits:AddLabel("<font size='20'>🤝 Special Thanks to: Halis</font>")
-credits:AddLabel("<font size='20'>❤️ Thanks for the support!</font>")
+credits:AddLabel("--------------------------")
+credits:AddLabel("🤝 Special Thanks to: Halis")
+credits:AddLabel("❤️ Thanks for the support!")
 
 -- Kapanış
-credits:AddLabel("<font size='20'>--------------------------</font>")
-credits:AddLabel("<font size='20'>🙏 Thank you for using Syniox!</font>")
+credits:AddLabel("--------------------------")
+credits:AddLabel("🙏 Thank you for using Syniox Hub!")
