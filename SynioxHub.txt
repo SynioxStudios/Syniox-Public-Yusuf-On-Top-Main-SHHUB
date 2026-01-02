@@ -1890,7 +1890,6 @@ end
 
 local VIM = game:GetService("VirtualInputManager")
 
-
 local Misc = window:AddTab("Misc")
 
 Misc:AddButton("Redeem All Muscle Codes", function()
