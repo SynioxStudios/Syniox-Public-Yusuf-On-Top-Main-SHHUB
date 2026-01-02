@@ -1,4 +1,4 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SynioxStudios/SynioxPublic-SH-MSGui-ByYusuf-Font/refs/heads/main/v2%20(1).txt"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/ISPPs54/Ui/refs/heads/main/eeee"))()
 
 -- Oyuncu bilgilerini alıyoruz
 local player = game.Players.LocalPlayer
