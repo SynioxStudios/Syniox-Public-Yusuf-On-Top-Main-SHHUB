@@ -1866,6 +1866,67 @@ teleport:AddButton("📍Brawl Regular", function()
     })
 end)
 
+local Gym = window:AddTab("GYM)
+
+local SelectPlayerName = ""
+
+local PlayerDrop = LookDura:AddDropdown("Select Player", function(Value)
+    SelectPlayerName = Value:match("| (.+)")
+    previousValues = {}
+end)
+
+local Playerslist = {}
+for _, Plr in pairs(game:GetService("Players"):GetPlayers()) do
+    local displayName = Plr.DisplayName .. " | " .. Plr.Name
+    table.insert(Playerslist, displayName)
+end
+for _, AddPlr in ipairs(Playerslist) do
+    PlayerDrop:Add(AddPlr)
+end
+
+local function FormatNumberWithCommas(number)
+    local formatted = tostring(number):reverse():gsub("(%d%d%d)", "%1,"):reverse()
+    return formatted:gsub("^,", "")
+end
+
+local VIM = game:GetService("VirtualInputManager")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local function pressEKey()
+    VIM:SendKeyEvent(true, "E", false, game)
+    task.wait(0.1)
+    VIM:SendKeyEvent(false, "E", false, game)
+end
+
+local function autoLift()
+    while getgenv().working do
+        LocalPlayer.muscleEvent:FireServer("rep")
+        task.wait()
+    end
+end
+
+local function teleportAndStart(machineName, position)
+    local character = LocalPlayer.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        character.HumanoidRootPart.CFrame = position
+        task.wait(0.1)
+        pressEKey()
+        task.spawn(autoLift)
+    end
+end
+
+fastStrengthFolder:AddSwitch("MUSCLE KING GYM", function(bool)
+    if getgenv().working and not bool then
+        getgenv().working = false
+        return
+    end
+    getgenv().working = bool
+    if bool then
+        teleportAndStart("Pull Up", CFrame.new(-8772 53 -5662)
+    end
+end)
+
 local Misc = window:AddTab("Misc")
 
 Misc:AddButton("Redeem All Muscle Codes", function()
