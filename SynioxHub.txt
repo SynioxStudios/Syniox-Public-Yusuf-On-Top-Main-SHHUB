@@ -18,8 +18,6 @@ local AutoFarm = window:AddTab("Farm")
 
 AutoFarm:AddLabel("Complements to Farm")
 
-local autoEatEnabled = false
-
 -- Egg yeme
 local function eatProteinEgg()
     local backpack = player:WaitForChild("Backpack")
