@@ -1710,7 +1710,7 @@ end)
 
 local teleport = window:AddTab("Teleport")
 
-teleport:AddButton("Spawn", function()
+teleport:AddButton("📍Spawn", function()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
@@ -1868,34 +1868,7 @@ end)
 
 local Misc = window:AddTab("Misc")
 
-Misc:AddButton("Redeem All Muscle Codes", function()
-    local remote = game:GetService("ReplicatedStorage").rEvents.codeRemote
-    local codes = {
-        Misc:AddButton("Redeem All Muscle Codes", function()
-    local remote = game:GetService("ReplicatedStorage").rEvents.codeRemote
-    local codes = {
-        "musclestorm50", 
-        "spacegems50", 
-        "megalift50", 
-        "speedy50", 
-        "skybloom75", 
-        "galaxycrystal50", 
-        "supermuscle100", 
-        "superpunch100", 
-        "epicreward500", 
-        "launch250", 
-        "froerse()
-    return formatted:gsub("^,", "")
-end
-
-local VIM = game:GetService("VirtualInputManager")
-
-local Misc = window:AddTab("Misc")
-
-Misc:AddButton("Redeem All Muscle Codes", function()
-    local remote = game:GetService("ReplicatedStorage").rEvents.codeRemote
-    local codes = {
-        Misc:AddButton("Redeem All Muscle Codes", function()
+Misc:AddButton("Redeem All Codes", function()
     local remote = game:GetService("ReplicatedStorage").rEvents.codeRemote
     local codes = {
         "musclestorm50", 
@@ -2277,7 +2250,7 @@ Misc:AddSwitch("Auto Clear Inventory", function(state)
     autoEatBoostsEnabled = state
 end)
 
-local tabFarming = window:AddTab("Fast Farm")
+local tabFarming = window:AddTab("Pack Farm")
 
 tabFarming:AddLabel("Fast Farming").TextSize = 23
 
