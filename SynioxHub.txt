@@ -20,11 +20,10 @@ AutoFarm:AddLabel("Complements to Farm")
 
 local autoEatEnabled = false
 
+-- Egg yeme
 local function eatProteinEgg()
-    local player = game.Players.LocalPlayer
     local backpack = player:WaitForChild("Backpack")
     local character = player.Character or player.CharacterAdded:Wait()
-
     local egg = backpack:FindFirstChild("Protein Egg")
     if egg then
         egg.Parent = character
@@ -34,35 +33,34 @@ local function eatProteinEgg()
     end
 end
 
+-- 30 Dakikalık Döngü
 task.spawn(function()
     while true do
-        if autoEatEnabled then
+        if autoEat30Enabled then
             eatProteinEgg()
-            task.wait(1800)
-        else
-            task.wait(1)
+            task.wait(1800) -- 30 Dakika
         end
+        task.wait(1)
     end
 end)
 
--- 30 Dakika Butonu
+-- 60 Dakikalık Döngü
+task.spawn(function()
+    while true do
+        if autoEat60Enabled then
+            eatProteinEgg()
+            task.wait(3600) -- 60 Dakika
+        end
+        task.wait(1)
+    end
+end)
+
+-- FARM SEKMESİNDEKİ BUTONLAR
 AutoFarm:AddSwitch("🥚 Auto Eat Egg 30 Min", function(state)
     autoEat30Enabled = state
 end)
 
-task.spawn(function()
-    while true do
-        if autoEatEnabled then
-            eatProteinEgg()
-            task.wait(3600)
-        else
-            task.wait(1)
-        end
-    end
-end)
-
--- 60 Dakika Butonu (Script'in ilerleyen kısımlarındaysa orayı da bulup değiştir)
-fastStrengthFolder:AddSwitch("🥚Auto Eat Egg 60 Min", function(state) -- Eğer ismi buysa
+AutoFarm:AddSwitch("🥚 Auto Eat Egg 60 Min", function(state)
     autoEat60Enabled = state
 end)
 
