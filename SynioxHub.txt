@@ -1,4 +1,4 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SynioxStudios/SynioxPublic-SH-MSGui-ByYusuf-Font/refs/heads/main/v2%20(1).txt"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Byhalis/Gui-v8/main/v2))()
 
 -- Oyuncu bilgilerini alıyoruz
 local player = game.Players.LocalPlayer
@@ -2652,8 +2652,18 @@ end)
 local credits = window:AddTab("Credits")
 
 -- Ana Bilgiler
-credits:AddLabel("✨ Syniox V2")
+credits:AddLabel("✨ Syniox Hub V2")
 credits:AddLabel("👤 Developer: Yusuf")
+credits:AddLabel("📺 YouTube: SynioxYusuf") -- Kanal adın eklendi
+
+-- Sosyal Medya ve Destek
+credits:AddLabel("--------------------------")
+
+-- Yeni Discord Butonu (Güncel Link)
+credits:AddButton("🔗 Join Discord Server", function()
+    setclipboard("https://discord.gg/DbAU5Z6HPd")
+    -- Link panoya kopyalanır
+end)
 
 -- Teşekkür Bölümü
 credits:AddLabel("--------------------------")
