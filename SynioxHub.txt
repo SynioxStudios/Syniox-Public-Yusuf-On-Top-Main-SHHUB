@@ -4,6 +4,9 @@ local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Synio
 local player = game.Players.LocalPlayer
 local displayName = player.DisplayName
 
+local autoEat30Enabled = false
+local autoEat60Enabled = false
+
 -- Gui Tasarım
 local window = library:AddWindow("SYNIOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.0 || HELLO - " .. displayName, {
     main_color = Color3.fromRGB(0, 0, 0),
@@ -42,8 +45,9 @@ task.spawn(function()
     end
 end)
 
+-- 30 Dakika Butonu
 AutoFarm:AddSwitch("🥚 Auto Eat Egg 30 Min", function(state)
-    autoEatEnabled = state
+    autoEat30Enabled = state
 end)
 
 task.spawn(function()
@@ -57,8 +61,9 @@ task.spawn(function()
     end
 end)
 
-AutoFarm:AddSwitch("🥚 Auto Eat Egg 60 Min", function(state)
-    autoEatEnabled = state
+-- 60 Dakika Butonu (Script'in ilerleyen kısımlarındaysa orayı da bulup değiştir)
+fastStrengthFolder:AddSwitch("🥚Auto Eat Egg 60 Min", function(state) -- Eğer ismi buysa
+    autoEat60Enabled = state
 end)
 
 local repToggle = false
