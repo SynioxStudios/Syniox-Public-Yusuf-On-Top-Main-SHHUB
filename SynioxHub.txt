@@ -1,5 +1,12 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Byhalis/Gui-v8/main/v2"))()
 
+local autoEat30Enabled = false
+local autoEat60Enabled = false
+local targetRebirthValue = 0
+local function updateStats() 
+
+end
+
 -- Oyuncu bilgilerini alıyoruz
 local player = game.Players.LocalPlayer
 local displayName = player.DisplayName
