@@ -4,9 +4,6 @@ local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Byhal
 local player = game.Players.LocalPlayer
 local displayName = player.DisplayName
 
-local autoEat30Enabled = false
-local autoEat60Enabled = false
-
 -- Gui Tasarım
 local window = library:AddWindow("SYNIOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.0 || HELLO - " .. displayName, {
     main_color = Color3.fromRGB(0, 0, 0),
@@ -16,7 +13,7 @@ local window = library:AddWindow("SYNIOX PUBLIC | MUSCLE LEGENDS | ByYusuf | V2.
 
 local AutoFarm = window:AddTab("Farm")
 
-AutoFarm:AddLabel("Complements to Farm")
+AutoFarm:AddLabel("Op Farm")
 
 -- Egg yeme
 local function eatProteinEgg()
@@ -42,6 +39,10 @@ task.spawn(function()
     end
 end)
 
+AutoFarm:AddSwitch("🥚 Auto Eat Egg 30 Min", function(state)
+    autoEat30Enabled = state
+end)
+
 -- 60 Dakikalık Döngü
 task.spawn(function()
     while true do
@@ -51,11 +52,6 @@ task.spawn(function()
         end
         task.wait(1)
     end
-end)
-
--- FARM SEKMESİNDEKİ BUTONLAR
-AutoFarm:AddSwitch("🥚 Auto Eat Egg 30 Min", function(state)
-    autoEat30Enabled = state
 end)
 
 AutoFarm:AddSwitch("🥚 Auto Eat Egg 60 Min", function(state)
@@ -131,110 +127,6 @@ folder1:AddSwitch("Situps", function(bool)
     end)
 end)
 
--- JUNGLE GYM BÖLMESİ
-local jungleFolder = AutoFarm:AddFolder("Jungle Gym")
-
--- E Tuşu Fonksiyonu (Hızlı Bas-Çek)
-local VIM = game:GetService("VirtualInputManager")
-local function pressEKey()
-    VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
-    task.wait(1)
-    VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
-end
-
--- 1. Auto Jungle Lift
-local liftOn = false
-jungleFolder:AddSwitch("Auto Jungle Lift", function(bool)
-    liftOn = bool
-    if bool then
-        task.spawn(function()
-            local targetPos = Vector3.new(-8642.396, 6.798, 2086.103)
-            while liftOn do
-                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    if (root.Position - targetPos).Magnitude > 5 then
-                        root.CFrame = CFrame.new(targetPos)
-                        -- Işınlandığı anda binmek için E basar
-                        pressEKey()
-                        task.wait(1) -- Binme animasyonu için kısa bir güvenlik payı
-                    end
-                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                end
-                task.wait(1)
-            end
-        end)
-    end
-end)
-
--- 2. Auto Bench Press
-local benchOn = false
-jungleFolder:AddSwitch("Auto Bench Press", function(bool)
-    benchOn = bool
-    if bool then
-        task.spawn(function()
-            local targetPos = Vector3.new(-8173, 64, 1898)
-            while benchOn do
-                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    if (root.Position - targetPos).Magnitude > 5 then
-                        root.CFrame = CFrame.new(targetPos)
-                        pressEKey()
-                        task.wait(0.5)
-                    end
-                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                end
-                task.wait(0.05)
-            end
-        end)
-    end
-end)
-
--- 3. Auto Squat
-local squatOn = false
-jungleFolder:AddSwitch("Auto Squat", function(bool)
-    squatOn = bool
-    if bool then
-        task.spawn(function()
-            local targetPos = Vector3.new(-8352, 34, 2878)
-            while squatOn do
-                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    if (root.Position - targetPos).Magnitude > 5 then
-                        root.CFrame = CFrame.new(targetPos)
-                        pressEKey()
-                        task.wait(0.5)
-                    end
-                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                end
-                task.wait(0.05)
-            end
-        end)
-    end
-end)
-
--- 4. Auto Boulder
-local boulderOn = false
-jungleFolder:AddSwitch("Auto Boulder", function(bool)
-    boulderOn = bool
-    if bool then
-        task.spawn(function()
-            local targetPos = Vector3.new(-8621, 34, 2684)
-            while boulderOn do
-                local root = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if root then
-                    if (root.Position - targetPos).Magnitude > 5 then
-                        root.CFrame = CFrame.new(targetPos)
-                        pressEKey()
-                        task.wait(0.5)
-                    end
-                    game:GetService("Players").LocalPlayer.muscleEvent:FireServer("rep")
-                end
-                task.wait(0.05)
-            end
-        end)
-    end
-end)
-
 local function equipTool(toolName, character, backpack)
     local existingTool = character:FindFirstChildOfClass("Tool")
     if existingTool then
@@ -307,7 +199,7 @@ function gettool()
             game.Players.LocalPlayer.Character.Humanoid:EquipTool(v)
         end
     end
-    -- Eventleri 2şer kez ateşleyerek hızı artırıyoruz
+    -- Eventleri 2 kez ateşleyerek hızı artırıyoruz
     game:GetService("Players").LocalPlayer.muscleEvent:FireServer("punch", "leftHand")
     game:GetService("Players").LocalPlayer.muscleEvent:FireServer("punch", "rightHand")
     game:GetService("Players").LocalPlayer.muscleEvent:FireServer("punch", "leftHand")
@@ -320,7 +212,7 @@ Rock:AddSwitch("Tiny Rock 0", function(Value)
     getgenv().autoFarm = Value
     task.spawn(function()
         while getgenv().autoFarm do
-            task.wait(0.01) -- Bekleme süresi minimuma indirildi
+            task.wait(0.01) -- Bekleme süresinin 
             if not getgenv().autoFarm then break end
             if game:GetService("Players").LocalPlayer.Durability.Value >= 0 then
                 for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
@@ -1654,7 +1546,7 @@ local Update12 = LookDura:AddLabel("")
 local Update13 = LookDura:AddLabel("")
 
 task.spawn(function()
-    while task.wait(0.5) do -- Saniyede 2 kez güncellemek yeterlidir (CPU dostu)
+    while task.wait(0.2) do -- Saniyede 2 kez güncellemek yeterlidir (CPU dostu)
         if SelectPlayerName ~= "" then
             local player = game.Players:FindFirstChild(SelectPlayerName)
             if player then
@@ -1955,7 +1847,7 @@ Misc:AddSwitch("Anti Afk", function(Value)
 
         Title.Parent = MainFrame
         Title.Size = UDim2.new(1, 0, 0, 28)
-        Title.Text = "Syniox Public" 
+        Title.Text = "Syniox Anti-Afk" 
         Title.TextColor3 = Color3.fromRGB(200, 0, 0)
         Title.BackgroundTransparency = 1
         Title.TextSize = 15
@@ -2636,7 +2528,7 @@ task.spawn(function()
     end
 end)
 
-fastStrengthFolder:AddSwitch("🥚Auto Eat Egg 30 Min", function(state)
+fastStrengthFolder:AddSwitch("🥚 Auto Eat Egg 30 Min", function(state)
     autoEatEnabled = state
 end)
 
@@ -2654,22 +2546,12 @@ local credits = window:AddTab("Credits")
 -- Ana Bilgiler
 credits:AddLabel("✨ Syniox Hub V2")
 credits:AddLabel("👤 Developer: Yusuf")
-credits:AddLabel("📺 YouTube: SynioxYusuf") -- Kanal adın eklendi
 
--- Sosyal Medya ve Destek
-credits:AddLabel("--------------------------")
-
--- Yeni Discord Butonu (Güncel Link)
-credits:AddButton("🔗 Join Discord Server", function()
-    setclipboard("https://discord.gg/DbAU5Z6HPd")
-    -- Link panoya kopyalanır
-end)
-
--- Teşekkür Bölümü
+--Credits
 credits:AddLabel("--------------------------")
 credits:AddLabel("🤝 Special Thanks to: Halis")
 credits:AddLabel("❤️ Thanks for the support!")
 
--- Kapanış
+-- End
 credits:AddLabel("--------------------------")
 credits:AddLabel("🙏 Thank you for using Syniox Hub!")
